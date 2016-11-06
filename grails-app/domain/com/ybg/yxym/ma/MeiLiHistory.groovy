@@ -11,4 +11,14 @@ class MeiLiHistory {
     Short type//类型1=人气值， 2=活动值， 3=亲善值
     Integer score = 0//得分
     String reason = ""//原因
+
+    static createInstance(UserBase userBase, Short type, Integer score, String reason) {
+        def meiLiHistory = new MeiLiHistory()
+        meiLiHistory.userBase = userBase
+        meiLiHistory.type = type
+        meiLiHistory.score = score
+        meiLiHistory.reason = reason
+        meiLiHistory.save flush: true
+        meiLiHistory
+    }
 }

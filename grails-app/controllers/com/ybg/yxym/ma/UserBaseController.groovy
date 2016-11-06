@@ -4,9 +4,9 @@ import com.ybg.yxym.utils.UserUtil
 import grails.converters.JSON
 import org.apache.commons.codec.digest.DigestUtils
 
-import java.text.SimpleDateFormat
-
 class UserBaseController {
+
+    def userBaseService
 
     /**
      * 用户登录
@@ -124,40 +124,7 @@ class UserBaseController {
     def completeData(String token, String birthday, String nickName, Integer sex, String avatar) {
         def map = [:]
         if (UserUtil.checkToken(token)) {
-            def userId = UserUtil.getUserId(token)
-            def userBase = UserBase.get(userId)
-            def userInfo = UserInfo.findByUserBase(userBase)
-            def userBaseChanged = false
-
-            if (avatar && avatar.length() > 5) {
-                userBase.avatar = avatar
-                userBaseChanged = true
-            }
-            if (nickName && nickName.length() > 0) {
-                userBase.nickName = nickName
-                userBaseChanged = true
-            }
-            if (userBaseChanged) {
-                userBase.save flush: true
-            }
-
-            def userInfoChanged = false
-            try {
-                def sdf = new SimpleDateFormat("yyyy-MM-dd")
-                if (birthday && birthday.length() == 10) {
-                    userInfo.birthday = sdf.parse(birthday)
-                    userInfoChanged = true
-                }
-            } catch (Exception e) {
-                //
-            }
-            if (sex == 1 || sex == 0) {
-                userInfo.sex = sex
-                userInfoChanged = true
-            }
-            if (userInfoChanged) {
-                userInfo.save flush: true
-            }
+            userBaseService.completeUserBase(token, birthday, nickName, sex, avatar)
 
             map.isSuccess = true
             map.message = ""
@@ -170,6 +137,32 @@ class UserBaseController {
             map.data = ""
         }
 
+        render map as JSON
+    }
+
+    /**
+     * 第三方登录
+     * @param openid
+     * @param platform
+     * @param nickName
+     * @param userImage
+     * @param sex
+     */
+    def umLogin(String openid, String platform, String nickName, String userImage, String sex) {
+        def map = [:]
+        if (openid && platform) {
+            def token = userBaseService.getUMToken(openid, platform)
+            userBaseService.completeUserBase(token, null, nickName, Integer.valueOf(sex), userImage)
+            map.isSuccess = true
+            map.message = "登录完成"
+            map.errorCode = "0"
+            map.data = token
+        } else {
+            map.isSuccess = false
+            map.message = "参数不能为空"
+            map.errorCode = "1"
+            map.data = ""
+        }
         render map as JSON
     }
 }

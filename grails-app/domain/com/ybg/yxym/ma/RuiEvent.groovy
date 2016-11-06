@@ -3,6 +3,11 @@ package com.ybg.yxym.ma
 class RuiEvent {
 
     static constraints = {
+        title nullable: true
+        summary nullable: true
+        action nullable: true
+        fromDate nullable: true
+        toDate nullable: true
     }
 
     String title = ""//标题
