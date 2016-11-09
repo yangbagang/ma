@@ -7,6 +7,7 @@ import org.apache.commons.codec.digest.DigestUtils
 class UserBaseController {
 
     def userBaseService
+    def yueMeiCodeService
 
     /**
      * 用户登录
@@ -65,12 +66,16 @@ class UserBaseController {
             } else {
                 //生成实例
                 user = new UserBase()
-                user.ymCode = UserUtil.createYmCode()
+                user.ymCode = Long.valueOf(yueMeiCodeService.getYMCode())
                 user.ymUser = mobile
                 user.mobile = mobile
                 user.password = DigestUtils.sha256Hex(password)
                 user.flag = 1 as Short
                 user.save flush: true
+                //生成扩展实例
+                def userInfo = new UserInfo()
+                userInfo.userBase = user
+                userInfo.save flush: true
 
                 //构造返回数据
                 def token = UserUtil.createToken(user.id)

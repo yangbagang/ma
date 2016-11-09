@@ -39,8 +39,4 @@ class UserUtil {
         return false;
     }
 
-    public static Long createYmCode() {
-        //TODO 未实现随机生成
-        return 1
-    }
 }
