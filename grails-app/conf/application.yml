@@ -108,7 +108,7 @@ environments:
     production:
         dataSource:
             username: root
-            password: fuckyou1234
+            password: Yuemei@2017
             dbCreate: none
             url: jdbc:mysql://localhost:3306/yxym?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
             properties:
