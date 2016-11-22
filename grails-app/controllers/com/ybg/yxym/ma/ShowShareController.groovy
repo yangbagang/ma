@@ -23,7 +23,7 @@ class ShowShareController {
             map.isSuccess = false
             map.message = "美秀不存在，请检查。"
             map.errorCode = "1"
-            map.data = false
+            map.data = "false"
         }
         render map as JSON
     }

@@ -85,4 +85,14 @@ class RuiShowService {
         }
         meili
     }
+
+    def create(UserBase userBase, RuiBar ruiBar, String thumbnail, String title) {
+        def show = new RuiShow()
+        show.userBase = userBase
+        show.ruiBar = ruiBar
+        show.thumbnail = thumbnail
+        show.title = title
+        show.save flush: true
+        show
+    }
 }

@@ -55,13 +55,13 @@ class RuiShowController {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
                 map.errorCode = "2"
-                map.data = false
+                map.data = "false"
             }
         } else {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录。"
             map.errorCode = "1"
-            map.data = false
+            map.data = "false"
         }
         render map as JSON
     }
@@ -88,13 +88,13 @@ class RuiShowController {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
                 map.errorCode = "2"
-                map.data = false
+                map.data = "false"
             }
         } else {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录。"
             map.errorCode = "1"
-            map.data = false
+            map.data = "false"
         }
         render map as JSON
     }
@@ -121,13 +121,13 @@ class RuiShowController {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
                 map.errorCode = "2"
-                map.data = false
+                map.data = "false"
             }
         } else {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录。"
             map.errorCode = "1"
-            map.data = false
+            map.data = "false"
         }
         render map as JSON
     }
@@ -152,7 +152,42 @@ class RuiShowController {
             map.isSuccess = false
             map.message = "美秀不存在，请检查。"
             map.errorCode = "1"
-            map.data = false
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
+    /**
+     * 发布一条美秀
+     * @param token
+     * @param barId
+     * @param thumbnail
+     * @param title
+     * @return
+     */
+    def create(String token, Long barId, String thumbnail, String title) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            def ruiBar = RuiBar.get(barId)
+            if (ruiBar) {
+                def show = ruiShowService.create(userBase, ruiBar, thumbnail, title)
+
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = show
+            } else {
+                map.isSuccess = false
+                map.message = "美吧不存在，请检查。"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录。"
+            map.errorCode = "1"
+            map.data = "false"
         }
         render map as JSON
     }

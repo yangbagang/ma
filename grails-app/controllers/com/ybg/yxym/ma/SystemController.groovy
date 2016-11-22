@@ -38,17 +38,17 @@ class SystemController {
             map.isSuccess = true
             map.message = "验证码正确"
             map.errorCode = "0"
-            map.data = true
+            map.data = "true"
         } else if (result == 1) {
             map.isSuccess = false
             map.message = "验证码己过期"
             map.errorCode = "1"
-            map.data = false
+            map.data = "false"
         } else {
             map.isSuccess = true
             map.message = "验证码错误"
             map.errorCode = "2"
-            map.data = false
+            map.data = "false"
         }
         render map as JSON
     }

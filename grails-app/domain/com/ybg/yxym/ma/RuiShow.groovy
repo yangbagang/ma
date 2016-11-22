@@ -7,7 +7,6 @@ class RuiShow {
     static constraints = {
         thumbnail nullable: true
         title nullable: true
-        ruiEvent nullable: true
         ruiBar nullable: true
     }
 
@@ -18,7 +17,6 @@ class RuiShow {
     Integer pingNum = 0//评论次数
     Integer zanNum = 0//赞次数
     Integer shareNum = 0//分享次数
-    RuiEvent ruiEvent
     RuiBar ruiBar
     Short flag = 1 as Short//标志，1可用，0不可用
 

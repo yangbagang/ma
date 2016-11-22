@@ -22,7 +22,7 @@ class UserBaseController {
                 map.isSuccess = false
                 map.message = "用户名或密码错误"
                 map.errorCode = "2"
-                map.data = ""
+                map.data = "false"
             } else {
                 //生成实例
                 def pwd = DigestUtils.sha256Hex(password)
@@ -37,14 +37,14 @@ class UserBaseController {
                     map.isSuccess = false
                     map.message = "用户名或密码错误"
                     map.errorCode = "2"
-                    map.data = ""
+                    map.data = "false"
                 }
             }
         } else {
             map.isSuccess = false
             map.message = "参数不能为空"
             map.errorCode = "1"
-            map.data = ""
+            map.data = "false"
         }
         render map as JSON
     }
@@ -88,7 +88,7 @@ class UserBaseController {
             map.isSuccess = false
             map.message = "参数不能为空"
             map.errorCode = "1"
-            map.data = ""
+            map.data = "false"
         }
         render map as JSON
     }
@@ -111,7 +111,7 @@ class UserBaseController {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录"
             map.errorCode = "1"
-            map.data = ""
+            map.data = "false"
         }
 
         render map as JSON
@@ -134,12 +134,12 @@ class UserBaseController {
             map.isSuccess = true
             map.message = ""
             map.errorCode = "0"
-            map.data = true
+            map.data = "true"
         } else {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录"
             map.errorCode = "1"
-            map.data = ""
+            map.data = "false"
         }
 
         render map as JSON
@@ -166,7 +166,7 @@ class UserBaseController {
             map.isSuccess = false
             map.message = "参数不能为空"
             map.errorCode = "1"
-            map.data = ""
+            map.data = "false"
         }
         render map as JSON
     }

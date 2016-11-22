@@ -9,10 +9,12 @@ class YueMeiCodeController {
     def create(String prefix, int begin, int end, int length) {
         yueMeiCodeService.createWithPrefix(prefix, begin, end, length)
 
-        def result = [:]
-        result.success = true
-        result.message = ""
-        render result as JSON
+        def map = [:]
+        map.isSuccess = true
+        map.message = ""
+        map.errorCode = "0"
+        map.data = "true"
+        render map as JSON
     }
 
 }
