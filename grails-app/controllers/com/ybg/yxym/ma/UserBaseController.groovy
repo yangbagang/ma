@@ -67,6 +67,7 @@ class UserBaseController {
                 //生成实例
                 user = new UserBase()
                 user.ymCode = Long.valueOf(yueMeiCodeService.getYMCode())
+                user.nickName = "悦美" + user.ymCode
                 user.ymUser = mobile
                 user.mobile = mobile
                 user.password = DigestUtils.sha256Hex(password)

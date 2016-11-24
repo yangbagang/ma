@@ -15,7 +15,7 @@ class RuiShowController {
                 eq("flag", 1 as Short)
                 if (type == 1) {
                     order("createTime", "desc")
-                } else (type == 2) {
+                } else if (type == 2) {
                     order("viewNum", "desc")
                 }
             }
@@ -141,6 +141,9 @@ class RuiShowController {
         def map = [:]
         def show = RuiShow.get(showId)
         if (show && show.flag == 1 as Short) {
+            show.viewNum = show.viewNum + 1
+            show.save flush: true
+
             def files = ShowFile.findAllByShowAndFlag(show, 1 as Short)
             show.files = files
 
@@ -165,13 +168,13 @@ class RuiShowController {
      * @param title
      * @return
      */
-    def create(String token, Long barId, String thumbnail, String title) {
+    def create(String token, Long barId, String thumbnail, String title, Short type) {
         def map = [:]
         if (UserUtil.checkToken(token)) {
             def userBase = UserBase.get(UserUtil.getUserId(token))
             def ruiBar = RuiBar.get(barId)
             if (ruiBar) {
-                def show = ruiShowService.create(userBase, ruiBar, thumbnail, title)
+                def show = ruiShowService.create(userBase, ruiBar, thumbnail, title, type)
 
                 map.isSuccess = true
                 map.message = ""

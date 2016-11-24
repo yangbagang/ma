@@ -86,13 +86,27 @@ class RuiShowService {
         meili
     }
 
-    def create(UserBase userBase, RuiBar ruiBar, String thumbnail, String title) {
+    def create(UserBase userBase, RuiBar ruiBar, String thumbnail, String title, Short type) {
+        //生成实例
         def show = new RuiShow()
         show.userBase = userBase
         show.ruiBar = ruiBar
         show.thumbnail = thumbnail
         show.title = title
+        show.type = type
         show.save flush: true
+        if (show.hasErrors()) {
+            show.errors.each {
+                println(it)
+            }
+        }
+
+        //计算活力值
+        def postMeiLi = getUserMeili(userBase)
+        postMeiLi.hl = postMeiLi.hl + MeiliConstant.POST_PHOTO_VIEW
+        postMeiLi.save flush: true
+
+        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_PHOTO_VIEW, "发布")
         show
     }
 }
