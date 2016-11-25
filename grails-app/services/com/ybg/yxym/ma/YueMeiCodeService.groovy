@@ -36,4 +36,17 @@ class YueMeiCodeService {
         }
         ymCode?.code
     }
+
+    def createInstance(String code) {
+        def instance = new YueMeiCode()
+        instance.code = code
+        instance.hidden = 0 as Short
+        instance.flag = 1 as Short
+        instance.save(flush: true)
+        if (instance.hasErrors()) {
+            instance.errors.each {
+                println it
+            }
+        }
+    }
 }

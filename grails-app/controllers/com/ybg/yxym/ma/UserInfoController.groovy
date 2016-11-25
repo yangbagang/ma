@@ -7,7 +7,7 @@ class UserInfoController {
 
     /**
      * 获取用户信息
-     * @param token
+     * @param token 用户token
      * @return
      */
     def getUserInfo(String token) {

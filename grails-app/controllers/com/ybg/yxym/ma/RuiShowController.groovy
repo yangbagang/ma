@@ -7,6 +7,13 @@ class RuiShowController {
 
     def ruiShowService
 
+    /**
+     * 列出美秀。带分页。
+     * @param pageNum 显示第几页
+     * @param pageSize 每页显示多少条
+     * @param type 按哪种排序。1为最新，2为最热。
+     * @return
+     */
     def list(Integer pageNum, Integer pageSize, Integer type) {
         def map = [:]
         if (pageNum && pageSize && type) {
@@ -34,9 +41,9 @@ class RuiShowController {
 
     /**
      * 评价秀
-     * @param token
-     * @param showId
-     * @param content
+     * @param token 用户token
+     * @param showId 美秀ID
+     * @param content 评价内容
      * @return
      */
     def ping(String token, Long showId, String content) {
@@ -68,8 +75,8 @@ class RuiShowController {
 
     /**
      * 赞秀
-     * @param token
-     * @param showId
+     * @param token 用户token
+     * @param showId 美秀ID
      * @return
      */
     def zan(String token, Long showId) {
@@ -101,8 +108,8 @@ class RuiShowController {
 
     /**
      * 分享秀
-     * @param token
-     * @param showId
+     * @param token 用户token
+     * @param showId 美秀ID
      * @return
      */
     def share(String token, Long showId) {
@@ -133,8 +140,8 @@ class RuiShowController {
     }
 
     /**
-     * 显示详情
-     * @param showId
+     * 显示美秀详细资料，包含相关附件，如附加的图片等。但不包括用户信息。
+     * @param showId 美秀ID
      * @return
      */
     def detail(Long showId) {
@@ -162,10 +169,10 @@ class RuiShowController {
 
     /**
      * 发布一条美秀
-     * @param token
-     * @param barId
-     * @param thumbnail
-     * @param title
+     * @param token 用户token
+     * @param barId 美秀版块ID
+     * @param thumbnail 缩略图
+     * @param title 美秀描述
      * @return
      */
     def create(String token, Long barId, String thumbnail, String title, Short type) {

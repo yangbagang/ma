@@ -7,8 +7,8 @@ class ShowFileController {
     def showFileService
 
     /**
-     * 显示全部附件
-     * @param showId
+     * 显示某个美秀全部附件
+     * @param showId 美秀ID
      * @return
      */
     def list(Long showId) {
@@ -32,8 +32,8 @@ class ShowFileController {
 
     /**
      * 为某个美秀增加图片或视频等文件。
-     * @param showId
-     * @param fileIds
+     * @param showId 美秀ID
+     * @param fileIds 附件字符串（上传到文件服务器返回的路径字符串），多个以逗号分割。
      * @param type
      */
     def addFiles(Long showId, String fileIds, Short type) {

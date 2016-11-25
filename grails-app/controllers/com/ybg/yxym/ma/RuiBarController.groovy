@@ -5,7 +5,7 @@ import grails.converters.JSON
 class RuiBarController {
 
     /**
-     * 显示可用板块（吧名）
+     * 显示系统内所有可用板块（吧名）
      * @return
      */
     def list() {

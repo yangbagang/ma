@@ -5,8 +5,8 @@ import grails.converters.JSON
 class ShowShareController {
 
     /**
-     * 显示全部分享
-     * @param showId
+     * 显示某美秀的全部分享
+     * @param showId 美秀ID
      * @return
      */
     def list(Long showId) {

@@ -96,7 +96,7 @@ class UserBaseController {
 
     /**
      * 获得用户基本信息
-     * @param token
+     * @param token 用户token
      */
     def getUserBase(String token) {
         def map = [:]
@@ -120,11 +120,11 @@ class UserBaseController {
 
     /**
      * 补充资料
-     * @param token
-     * @param birthday
-     * @param nickName
-     * @param sex
-     * @param avatar
+     * @param token 用户token
+     * @param birthday 生日
+     * @param nickName 呢称
+     * @param sex 性别。1为男0为女
+     * @param avatar 用户头像字符串（上传到文件服务器的返回字符串）
      * @return
      */
     def completeData(String token, String birthday, String nickName, Integer sex, String avatar) {
@@ -148,11 +148,11 @@ class UserBaseController {
 
     /**
      * 第三方登录
-     * @param openid
-     * @param platform
-     * @param nickName
-     * @param userImage
-     * @param sex
+     * @param openid 第三方唯一字符识别码
+     * @param platform 第三方平台名称
+     * @param nickName 呢称
+     * @param userImage 头像
+     * @param sex 性别，1为男0为女
      */
     def umLogin(String openid, String platform, String nickName, String userImage, String sex) {
         def map = [:]

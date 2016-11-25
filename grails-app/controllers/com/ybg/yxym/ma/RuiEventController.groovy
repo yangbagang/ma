@@ -7,8 +7,8 @@ class RuiEventController {
     def ruiEventService
 
     /**
-     * 显示全部话题
-     * @param showId
+     * 显示某美秀参与的全部话题
+     * @param showId 美秀ID
      * @return
      */
     def list(Long showId) {
@@ -31,9 +31,9 @@ class RuiEventController {
     }
 
     /**
-     * 添加话题
-     * @param showId
-     * @param eventIds
+     * 为美秀添加话题
+     * @param showId 美秀ID
+     * @param eventIds 话题ID字符串，以逗号分割。
      * @return
      */
     def appendEvent(Long showId, String eventIds) {
