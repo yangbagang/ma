@@ -22,5 +22,8 @@ class RuiShow {
     Short flag = 1 as Short//标志，1可用，0不可用
 
     transient List<ShowFile> files
-
+    transient Integer fileNum
+    Integer getFileNum() {
+        ShowFile.countByShow(this)
+    }
 }
