@@ -171,4 +171,29 @@ class UserBaseController {
         }
         render map as JSON
     }
+
+    /**
+     * 根据美秀ID获得用户基本信息
+     * @param showId 美秀ID
+     * @param token 用户token
+     */
+    def getAuthorInfoByShowId(Long showId, String token) {
+        def map = [:]
+        def show = RuiShow.get(showId)
+        if (show) {
+            def userBase = userBaseService.loadAuthorInfo(show, token)
+
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = userBase
+        } else {
+            map.isSuccess = false
+            map.message = "美秀不存在"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
 }

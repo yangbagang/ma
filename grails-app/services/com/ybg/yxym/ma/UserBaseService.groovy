@@ -55,4 +55,32 @@ class UserBaseService {
             userInfo.save flush: true
         }
     }
+
+    def loadAuthorInfo(RuiShow show, String token) {
+        def userBase = [:]
+        if (show.userBase) {
+            userBase.id = show.userBase.id
+            userBase.nickName = show.userBase.nickName
+            userBase.ymCode = show.userBase.ymCode
+            userBase.avatar = show.userBase.avatar
+            if (token == null || token == "") {
+                userBase.flag = 0
+            } else {
+                def user = UserBase.get(UserUtil.getUserId(token))
+                if (user) {
+                    def count = Follow.countByUserBaseAndFollow(show.userBase, user)
+                    userBase.flag = count
+                } else {
+                    userBase.flag = 0
+                }
+            }
+            //计算美力值
+            def sum = 0
+            MeiLiHistory.findAllByUserBaseAndShowId(show.userBase, show.id).each { history ->
+                sum += history.score
+            }
+            userBase.ml = sum
+        }
+        userBase
+    }
 }
