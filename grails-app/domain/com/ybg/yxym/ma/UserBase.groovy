@@ -27,4 +27,5 @@ class UserBase {
     String ymMemo = ""//宣言
     String platform = ""//平台
     String platformId = ""//平台ID
+    Date createTime = new Date()
 }

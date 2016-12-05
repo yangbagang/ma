@@ -20,7 +20,7 @@ class RuiShowController {
             def c = RuiShow.createCriteria()
             def result = c.list(max: pageSize, offset: (pageNum - 1) * pageSize) {
                 eq("flag", 1 as Short)
-                if (type == 1) {
+                if (type == 1 || type == 3) {
                     order("createTime", "desc")
                 } else if (type == 2) {
                     order("viewNum", "desc")
@@ -52,12 +52,20 @@ class RuiShowController {
             def ruiShow = RuiShow.get(showId)
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (ruiShow && ruiShow.flag == 1 as Short) {
-                def showPing = ruiShowService.ping(ruiShow, userBase, content)
+                def ping = ShowPing.findByShowAndUserBase(ruiShow, userBase)
+                if (ping) {
+                    map.isSuccess = false
+                    map.message = "己经评论过了，不能重复评论。"
+                    map.errorCode = "3"
+                    map.data = "false"
+                } else {
+                    def showPing = ruiShowService.ping(ruiShow, userBase, content)
 
-                map.isSuccess = true
-                map.message = ""
-                map.errorCode = "0"
-                map.data = showPing
+                    map.isSuccess = true
+                    map.message = ""
+                    map.errorCode = "0"
+                    map.data = showPing
+                }
             } else {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
@@ -85,12 +93,20 @@ class RuiShowController {
             def ruiShow = RuiShow.get(showId)
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (ruiShow && ruiShow.flag == 1 as Short) {
-                def showZan = ruiShowService.zan(ruiShow, userBase)
+                def zan = ShowZan.findByShowAndUserBase(ruiShow, userBase)
+                if (zan) {
+                    map.isSuccess = false
+                    map.message = "己经赞过了，不能重复赞。"
+                    map.errorCode = "3"
+                    map.data = "false"
+                } else {
+                    def showZan = ruiShowService.zan(ruiShow, userBase)
 
-                map.isSuccess = true
-                map.message = ""
-                map.errorCode = "0"
-                map.data = showZan
+                    map.isSuccess = true
+                    map.message = ""
+                    map.errorCode = "0"
+                    map.data = showZan
+                }
             } else {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
@@ -118,12 +134,20 @@ class RuiShowController {
             def ruiShow = RuiShow.get(showId)
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (ruiShow && ruiShow.flag == 1 as Short) {
-                def showShare = ruiShowService.share(ruiShow, userBase)
+                def share = ShowShare.findByShowAndUserBase(ruiShow, userBase)
+                if (share) {
+                    map.isSuccess = false
+                    map.message = "不能重复转发。"
+                    map.errorCode = "3"
+                    map.data = "false"
+                } else {
+                    def showShare = ruiShowService.share(ruiShow, userBase)
 
-                map.isSuccess = true
-                map.message = ""
-                map.errorCode = "0"
-                map.data = showShare
+                    map.isSuccess = true
+                    map.message = ""
+                    map.errorCode = "0"
+                    map.data = showShare
+                }
             } else {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
@@ -196,6 +220,35 @@ class RuiShowController {
         } else {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录。"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
+    /**
+     * 获取悦秀评论、点赞、分享数量，以及是否己经评论、点赞、是否己经分享、是否己经评论。
+     * 以上数据保存在data中。pingNum评论数量，zanNum点赞数量，shareNum分享数量。
+     * hasPing大于0表示己评论，等于0表示未评论；hasZan大于0表示己点赞，等于0表示未点赞；hasShare大于0表示己分享，0表示未分享。
+     * @param token 用户token
+     * @param showId 美秀ID
+     */
+    def getActionNum(String token, Long showId) {
+        def map = [:]
+        def show = RuiShow.get(showId)
+        if (show && show.flag == 1 as Short) {
+            show.viewNum = show.viewNum + 1
+            show.save flush: true
+
+            def num = ruiShowService.getActionNum(show, token)
+
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = num
+        } else {
+            map.isSuccess = false
+            map.message = "美秀不存在，请检查。"
             map.errorCode = "1"
             map.data = "false"
         }

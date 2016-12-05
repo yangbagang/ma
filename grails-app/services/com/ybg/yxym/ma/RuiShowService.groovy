@@ -1,6 +1,7 @@
 package com.ybg.yxym.ma
 
 import com.ybg.yxym.utils.MeiliConstant
+import com.ybg.yxym.utils.UserUtil
 import grails.transaction.Transactional
 
 @Transactional
@@ -103,5 +104,30 @@ class RuiShowService {
 
         MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_PHOTO_VIEW, "发布", show.id)
         show
+    }
+
+    def getActionNum(RuiShow ruiShow, String token) {
+        def map = [:]
+        map.pingNum = ShowPing.countByShow(ruiShow)
+        map.zanNum = ShowZan.countByShow(ruiShow)
+        map.shareNum = ShowShare.countByShow(ruiShow)
+        if (UserUtil.checkToken(token)) {
+            def userId = UserUtil.getUserId(token)
+            def userBase = UserBase.get(userId)
+            if (userBase) {
+                map.hasPing = ShowPing.countByShowAndUserBase(ruiShow, userBase)
+                map.hasZan = ShowZan.countByShowAndUserBase(ruiShow, userBase)
+                map.hasShare = ShowShare.countByShowAndUserBase(ruiShow, userBase)
+            } else {
+                map.hasPing = 0
+                map.hasZan = 0
+                map.hasShare = 0
+            }
+        } else {
+            map.hasPing = 0
+            map.hasZan = 0
+            map.hasShare = 0
+        }
+        map
     }
 }
