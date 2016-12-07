@@ -10,4 +10,14 @@ class ShowZan {
     Date createTime = new Date()
     UserBase userBase
 
+    transient String nickName
+    transient String avatar
+
+    String getNickName() {
+        userBase?.nickName ?: userBase?.ymCode
+    }
+
+    String getAvatar() {
+        userBase?.avatar
+    }
 }
