@@ -52,20 +52,20 @@ class RuiShowController {
             def ruiShow = RuiShow.get(showId)
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (ruiShow && ruiShow.flag == 1 as Short) {
-                def ping = ShowPing.findByShowAndUserBase(ruiShow, userBase)
-                if (ping) {
-                    map.isSuccess = false
-                    map.message = "己经评论过了，不能重复评论。"
-                    map.errorCode = "3"
-                    map.data = "false"
-                } else {
+//                def ping = ShowPing.findByShowAndUserBase(ruiShow, userBase)
+//                if (ping) {
+//                    map.isSuccess = false
+//                    map.message = "己经评论过了，不能重复评论。"
+//                    map.errorCode = "3"
+//                    map.data = "false"
+//                } else {
                     def showPing = ruiShowService.ping(ruiShow, userBase, content)
 
                     map.isSuccess = true
                     map.message = ""
                     map.errorCode = "0"
                     map.data = showPing
-                }
+//                }
             } else {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
@@ -134,20 +134,20 @@ class RuiShowController {
             def ruiShow = RuiShow.get(showId)
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (ruiShow && ruiShow.flag == 1 as Short) {
-                def share = ShowShare.findByShowAndUserBase(ruiShow, userBase)
-                if (share) {
-                    map.isSuccess = false
-                    map.message = "不能重复转发。"
-                    map.errorCode = "3"
-                    map.data = "false"
-                } else {
+//                def share = ShowShare.findByShowAndUserBase(ruiShow, userBase)
+//                if (share) {
+//                    map.isSuccess = false
+//                    map.message = "不能重复转发。"
+//                    map.errorCode = "3"
+//                    map.data = "false"
+//                } else {
                     def showShare = ruiShowService.share(ruiShow, userBase)
 
                     map.isSuccess = true
                     map.message = ""
                     map.errorCode = "0"
                     map.data = showShare
-                }
+//                }
             } else {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"

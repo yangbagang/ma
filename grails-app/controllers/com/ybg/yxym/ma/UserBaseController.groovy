@@ -103,6 +103,8 @@ class UserBaseController {
         if (UserUtil.checkToken(token)) {
             def userId = UserUtil.getUserId(token)
             def userBase = UserBase.get(userId)
+            def meiLi = UserMeiLi.findByUserBase(userBase)
+            userBase.ml = meiLi?.meiLi ?: 0
 
             map.isSuccess = true
             map.message = ""

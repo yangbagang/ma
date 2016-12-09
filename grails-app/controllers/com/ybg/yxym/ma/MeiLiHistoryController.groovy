@@ -80,4 +80,30 @@ class MeiLiHistoryController {
         }
         render map as JSON
     }
+
+    /**
+     * 查询某人蜜爱列表
+     * @param pageNum 页码
+     * @param pageSize 每页条数
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @param userId 指定用户ID
+     * @return
+     */
+    def miAiList(Integer pageNum, Integer pageSize, String beginTime, String endTime, Long userId) {
+        def map = [:]
+        if (pageNum && pageSize && beginTime && endTime) {
+            def data = meiLiHistoryService.listMiAi(pageNum, pageSize, beginTime, endTime, userId)
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = data
+        } else {
+            map.isSuccess = false
+            map.message = "参数不能为空"
+            map.errorCode = "1"
+            map.data = ""
+        }
+        render map as JSON
+    }
 }

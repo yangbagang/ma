@@ -20,13 +20,13 @@ class RuiShowService {
         postMeiLi.hl = postMeiLi.hl + MeiliConstant.POST_PING
         postMeiLi.save flush: true
 
-        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_PING, "评论", ruiShow.id)
+        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_PING, "评论", ruiShow.id, 0L)
         //计算积分，被评论者获得人气值
         def getMeiLi = getUserMeili(ruiShow.userBase)
         getMeiLi.rq = getMeiLi.rq + MeiliConstant.GET_PING
         getMeiLi.save flush: true
 
-        MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_PING, "评论", ruiShow.id)
+        MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_PING, "评论", ruiShow.id, userBase.id)
 
         return showPing
     }
@@ -43,13 +43,13 @@ class RuiShowService {
         postMeiLi.qs = postMeiLi.qs + MeiliConstant.POST_ZAN
         postMeiLi.save flush: true
 
-        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_QS, MeiliConstant.POST_ZAN, "赞", ruiShow.id)
+        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_QS, MeiliConstant.POST_ZAN, "赞", ruiShow.id, 0L)
         //计算积分，被评论者获得人气值
         def getMeiLi = getUserMeili(ruiShow.userBase)
         getMeiLi.rq = getMeiLi.rq + MeiliConstant.GET_PING
         getMeiLi.save flush: true
 
-        MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_ZAN, "赞", ruiShow.id)
+        MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_ZAN, "赞", ruiShow.id, userBase.id)
 
         return showZan
     }
@@ -66,13 +66,13 @@ class RuiShowService {
         postMeiLi.hl = postMeiLi.hl + MeiliConstant.POST_SHARE
         postMeiLi.save flush: true
 
-        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_SHARE, "分享", ruiShow.id)
+        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_SHARE, "分享", ruiShow.id, 0L)
         //计算积分，被评论者获得人气值
         def getMeiLi = getUserMeili(ruiShow.userBase)
         getMeiLi.rq = getMeiLi.rq + MeiliConstant.GET_SHARE
         getMeiLi.save flush: true
 
-        MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_SHARE, "分享", ruiShow.id)
+        MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_SHARE, "分享", ruiShow.id, userBase.id)
 
         return showShare
     }
@@ -102,7 +102,7 @@ class RuiShowService {
         postMeiLi.hl = postMeiLi.hl + MeiliConstant.POST_PHOTO_VIEW
         postMeiLi.save flush: true
 
-        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_PHOTO_VIEW, "发布", show.id)
+        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_PHOTO_VIEW, "发布", show.id, 0L)
         show
     }
 

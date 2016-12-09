@@ -28,4 +28,5 @@ class UserBase {
     String platform = ""//平台
     String platformId = ""//平台ID
     Date createTime = new Date()
+    transient Integer ml
 }

@@ -48,4 +48,52 @@ class FollowController {
 
         render map as JSON
     }
+
+    /**
+     * 获取指定用户的关注数量。即这个用户关注了多少人。
+     * @param userId
+     * @return
+     */
+    def getFollowNum(Long userId) {
+        def map = [:]
+        def userBase = UserBase.get(userId)
+        if (userBase) {
+            def num = Follow.countByFollow(userBase)
+
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = "${num}"
+        } else {
+            map.isSuccess = false
+            map.message = "指定用户不存在"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
+    /**
+     * 获取指定用户的粉丝数量，即有多少人关注了该用户。
+     * @param userId
+     * @return
+     */
+    def getFansNum(Long userId) {
+        def map = [:]
+        def userBase = UserBase.get(userId)
+        if (userBase) {
+            def num = Follow.countByUserBase(userBase)
+
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = "${num}"
+        } else {
+            map.isSuccess = false
+            map.message = "指定用户不存在"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
 }
