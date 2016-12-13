@@ -198,4 +198,44 @@ class UserBaseController {
 
         render map as JSON
     }
+
+    /**
+     * 更新用户基本资料
+     * @param token 用户token
+     * @param nickName 用户呢称
+     * @param avatar 用户头偈
+     * @param ymMemo 个性签名
+     * @return
+     */
+    def updateUserBase(String token, String nickName, String avatar, String ymMemo) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            if (userBase) {
+                userBase.nickName = nickName
+                if (avatar != null && avatar != "") {
+                    userBase.avatar = avatar
+                }
+                userBase.ymMemo = ymMemo
+                userBase.save flush: true
+
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = "true"
+            } else {
+                map.isSuccess = false
+                map.message = "用户不存在"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
 }
