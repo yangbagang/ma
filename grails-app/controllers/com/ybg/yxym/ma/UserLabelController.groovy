@@ -41,17 +41,20 @@ class UserLabelController {
 
     /**
      * 更新用户标签
-     * 只上传己选定标签，上传参数名为labels，参数类型为字符串数组
-     * @param token
+     * 只上传己选定标签，上传参数名为labels，多个喜好之间用逗号分开。
+     * @param token 多个喜好之间用逗号分开
+     * @param labels
      * @return
      */
-    def update(String token) {
+    def update(String token, String labels) {
         def map = [:]
         if (UserUtil.checkToken(token)) {
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (userBase) {
-                def names = request.getParameterValues("labels")
-                userLabelService.update(userBase, names)
+                if (labels == null) {
+                    labels = ""
+                }
+                userLabelService.update(userBase, labels.split(","))
 
                 map.isSuccess = true
                 map.message = ""

@@ -49,14 +49,14 @@ class UserInfoController {
      * @param city 市
      * @return
      */
-    def updateUserInfo(String token, String birthday, Integer sex, String position, Integer bodyHigh,
+    def updateUserInfo(String token, String birthday, String position, Integer bodyHigh,
                        Integer bodyWeight, String cupSize, Integer bust, Integer waist, Integer hips,
                        String province, String city) {
         def map = [:]
         if (UserUtil.checkToken(token)) {
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (userBase) {
-                userInfoService.updateUserInfo(UserInfo.findByUserBase(userBase), birthday, sex, position, bodyHigh,
+                userInfoService.updateUserInfo(UserInfo.findByUserBase(userBase), birthday, position, bodyHigh,
                 bodyWeight, cupSize, bust, waist, hips, province, city)
 
                 map.isSuccess = true

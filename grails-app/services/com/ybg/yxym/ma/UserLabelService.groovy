@@ -6,21 +6,7 @@ import grails.transaction.Transactional
 class UserLabelService {
 
     def list(UserBase userBase) {
-        def userLabelList = UserLabel.findAllByUserBase(userBase)*.systemLabel
-        def allLabelList = SystemLabel.list()
-        def data = []
-        for (SystemLabel label : allLabelList) {
-            def map = [:]
-            map.label = label.labelName
-            map.catalog = label.catalog
-            if (userLabelList != null && userLabelList.contains(label)) {
-                map.flag = 1
-            } else {
-                map.flag = 0
-            }
-            data.add(map)
-        }
-        data
+        UserLabel.findAllByUserBase(userBase)*.systemLabel
     }
 
     def update(UserBase userBase, String[] names) {
@@ -31,10 +17,12 @@ class UserLabelService {
         }
         //新增
         for (String name : names) {
-            def userLabel = new UserLabel()
-            userLabel.systemLabel = getSystemLabel(name)
-            userLabel.userBase = userBase
-            userLabel.save flush: true
+            if (name != "") {
+                def userLabel = new UserLabel()
+                userLabel.systemLabel = getSystemLabel(name)
+                userLabel.userBase = userBase
+                userLabel.save flush: true
+            }
         }
     }
 

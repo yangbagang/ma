@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 @Transactional
 class UserInfoService {
 
-    def updateUserInfo(UserInfo userInfo, String birthday, Integer sex, String position, Integer bodyHigh,
+    def updateUserInfo(UserInfo userInfo, String birthday, String position, Integer bodyHigh,
                        Integer bodyWeight, String cupSize, Integer bust, Integer waist, Integer hips,
                        String province, String city) {
         def userInfoChanged = false
@@ -20,11 +20,6 @@ class UserInfoService {
             }
         } catch (Exception e) {
             //
-        }
-        //性别
-        if (sex == 1 || sex == 0) {
-            userInfo.sex = sex
-            userInfoChanged = true
         }
         //职业
         if (position != null && position != "") {
