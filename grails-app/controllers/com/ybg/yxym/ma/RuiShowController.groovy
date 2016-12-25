@@ -59,12 +59,12 @@ class RuiShowController {
 //                    map.errorCode = "3"
 //                    map.data = "false"
 //                } else {
-                    def showPing = ruiShowService.ping(ruiShow, userBase, content)
+                    def num = ruiShowService.ping(ruiShow, userBase, content)
 
                     map.isSuccess = true
                     map.message = ""
                     map.errorCode = "0"
-                    map.data = showPing
+                    map.data = "${num}"
 //                }
             } else {
                 map.isSuccess = false
@@ -100,12 +100,12 @@ class RuiShowController {
                     map.errorCode = "3"
                     map.data = "false"
                 } else {
-                    def showZan = ruiShowService.zan(ruiShow, userBase)
+                    def num = ruiShowService.zan(ruiShow, userBase)
 
                     map.isSuccess = true
                     map.message = ""
                     map.errorCode = "0"
-                    map.data = showZan
+                    map.data = "${num}"
                 }
             } else {
                 map.isSuccess = false
@@ -141,12 +141,12 @@ class RuiShowController {
 //                    map.errorCode = "3"
 //                    map.data = "false"
 //                } else {
-                    def showShare = ruiShowService.share(ruiShow, userBase)
+                    def num = ruiShowService.share(ruiShow, userBase)
 
                     map.isSuccess = true
                     map.message = ""
                     map.errorCode = "0"
-                    map.data = showShare
+                    map.data = "${num}"
 //                }
             } else {
                 map.isSuccess = false
