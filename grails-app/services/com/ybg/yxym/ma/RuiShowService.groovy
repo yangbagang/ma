@@ -28,7 +28,7 @@ class RuiShowService {
 
         MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_PING, "评论", ruiShow.id, userBase.id)
 
-        return showPing
+        return ShowPing.countByShow(ruiShow)
     }
 
     def zan(RuiShow ruiShow, UserBase userBase) {
@@ -51,7 +51,7 @@ class RuiShowService {
 
         MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_ZAN, "赞", ruiShow.id, userBase.id)
 
-        return showZan
+        return ShowZan.countByShow(ruiShow)
     }
 
     def share(RuiShow ruiShow, UserBase userBase) {
@@ -74,7 +74,7 @@ class RuiShowService {
 
         MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_SHARE, "分享", ruiShow.id, userBase.id)
 
-        return showShare
+        return ShowShare.countByShow(ruiShow)
     }
 
     def getUserMeili(UserBase userBase) {
