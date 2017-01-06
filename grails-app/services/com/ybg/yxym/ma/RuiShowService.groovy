@@ -26,7 +26,12 @@ class RuiShowService {
         getMeiLi.rq = getMeiLi.rq + MeiliConstant.GET_PING
         getMeiLi.save flush: true
 
+        //创建历史记录
         MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_PING, "评论", ruiShow.id, userBase.id)
+
+        //增加评论数量
+        ruiShow.pingNum += 1
+        ruiShow.save flush: true
 
         return ShowPing.countByShow(ruiShow)
     }
@@ -51,6 +56,9 @@ class RuiShowService {
 
         MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_ZAN, "赞", ruiShow.id, userBase.id)
 
+        ruiShow.zanNum += 1
+        ruiShow.save flush: true
+
         return ShowZan.countByShow(ruiShow)
     }
 
@@ -74,6 +82,9 @@ class RuiShowService {
 
         MeiLiHistory.createInstance(ruiShow.userBase, MeiliConstant.MEILI_RQ, MeiliConstant.GET_SHARE, "分享", ruiShow.id, userBase.id)
 
+        ruiShow.shareNum += 1
+        ruiShow.save flush: true
+
         return ShowShare.countByShow(ruiShow)
     }
 
@@ -96,6 +107,11 @@ class RuiShowService {
         show.title = title
         show.type = type
         show.save flush: true
+        if (show.hasErrors()) {
+            show.errors.each {
+                println it
+            }
+        }
 
         //计算活力值
         def postMeiLi = getUserMeili(userBase)

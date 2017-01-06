@@ -44,7 +44,8 @@ class CaptchaUtil {
 
     static checkCaptcha(String mobile, String captcha) {
         def time = timeContainer.mobile
-        if (time) {
+        def code = codeContainer.mobile
+        if (time && code == captcha) {
             def now = new Date()
             def d = now.time - time.time
             if (d < VALID_TIME) {
@@ -56,4 +57,5 @@ class CaptchaUtil {
         }
         return 2//不存在
     }
+
 }

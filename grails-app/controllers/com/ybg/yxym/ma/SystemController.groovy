@@ -1,6 +1,7 @@
 package com.ybg.yxym.ma
 
 import com.ybg.yxym.utils.CaptchaUtil
+import com.ybg.yxym.utils.SMSUtil
 import grails.converters.JSON
 
 class SystemController {
@@ -10,13 +11,14 @@ class SystemController {
      * @param mobile 手机号
      */
     def getCaptcha(String mobile) {
-        //TODO 暂时指定一个，以后有了短信通道后再修改发送实际短信。
         def map = [:]
         if (mobile) {
             map.isSuccess = true
             map.message = "验证码己经发送"
             map.errorCode = "0"
-            map.data = CaptchaUtil.createCaptcha(mobile)
+            def captcha = CaptchaUtil.createCaptcha(mobile)
+            map.data = captcha
+            SMSUtil.sendCaptchaMsg(mobile, captcha)
         } else {
             map.isSuccess = false
             map.message = "参数不能为空"

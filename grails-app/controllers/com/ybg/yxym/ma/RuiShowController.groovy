@@ -197,6 +197,7 @@ class RuiShowController {
      * @param barId 美秀版块ID
      * @param thumbnail 缩略图
      * @param title 美秀描述
+     * @param type 类型//1图片2视频3直播
      * @return
      */
     def create(String token, Long barId, String thumbnail, String title, Short type) {
