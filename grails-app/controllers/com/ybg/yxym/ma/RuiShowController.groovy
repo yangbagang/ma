@@ -1,11 +1,14 @@
 package com.ybg.yxym.ma
 
+import com.ybg.yxym.utils.QiNiuUtil
 import com.ybg.yxym.utils.UserUtil
 import grails.converters.JSON
 
 class RuiShowController {
 
     def ruiShowService
+
+    def showViewHistoryService
 
     /**
      * 列出美秀。带分页。
@@ -52,20 +55,12 @@ class RuiShowController {
             def ruiShow = RuiShow.get(showId)
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (ruiShow && ruiShow.flag == 1 as Short) {
-//                def ping = ShowPing.findByShowAndUserBase(ruiShow, userBase)
-//                if (ping) {
-//                    map.isSuccess = false
-//                    map.message = "己经评论过了，不能重复评论。"
-//                    map.errorCode = "3"
-//                    map.data = "false"
-//                } else {
-                    def num = ruiShowService.ping(ruiShow, userBase, content)
+                def num = ruiShowService.ping(ruiShow, userBase, content)
 
-                    map.isSuccess = true
-                    map.message = ""
-                    map.errorCode = "0"
-                    map.data = "${num}"
-//                }
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = "${num}"
             } else {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
@@ -134,20 +129,12 @@ class RuiShowController {
             def ruiShow = RuiShow.get(showId)
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (ruiShow && ruiShow.flag == 1 as Short) {
-//                def share = ShowShare.findByShowAndUserBase(ruiShow, userBase)
-//                if (share) {
-//                    map.isSuccess = false
-//                    map.message = "不能重复转发。"
-//                    map.errorCode = "3"
-//                    map.data = "false"
-//                } else {
-                    def num = ruiShowService.share(ruiShow, userBase)
+                def num = ruiShowService.share(ruiShow, userBase)
 
-                    map.isSuccess = true
-                    map.message = ""
-                    map.errorCode = "0"
-                    map.data = "${num}"
-//                }
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = "${num}"
             } else {
                 map.isSuccess = false
                 map.message = "美秀不存在，请检查。"
@@ -205,7 +192,7 @@ class RuiShowController {
         if (UserUtil.checkToken(token)) {
             def userBase = UserBase.get(UserUtil.getUserId(token))
             def ruiBar = RuiBar.get(barId)
-            if (ruiBar) {
+            if (barId == 0L || ruiBar) {
                 def show = ruiShowService.create(userBase, ruiBar, thumbnail, title, type)
 
                 map.isSuccess = true
@@ -255,4 +242,131 @@ class RuiShowController {
         }
         render map as JSON
     }
+
+    /**
+     * 创建直播
+     * @param token
+     * @param barId 美吧ID
+     * @param thumbnail 封面
+     * @param event 话题
+     * @return
+     */
+    def createLive(String token, Long barId, String thumbnail, String event) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            def ruiBar = RuiBar.get(barId)
+            if (ruiBar) {
+                def show = ruiShowService.createLive(userBase, ruiBar, thumbnail, event)
+                def stream = QiNiuUtil.createStream("live${show.id}")
+                def url = QiNiuUtil.getRtmpPublishUrl("live${show.id}")
+                def data = [:]
+                data.show = show
+                data.url = url
+
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = data
+            } else {
+                map.isSuccess = false
+                map.message = "美吧不存在，请检查。"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录。"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
+    /**
+     * 观看直播
+     * @param showId
+     * @param token
+     * @return
+     */
+    def showLive(Long showId, String token) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            def show = RuiShow.get(showId)
+            if (show && show.flag == 1 as Short) {
+                show.viewNum = show.viewNum + 1
+                show.save flush: true
+
+                showViewHistoryService.create(show, userBase)
+
+                def url = QiNiuUtil.getRtmpLiveUrl("live${show.id}")
+                def data = [:]
+                data.show = show
+                data.url = url
+
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = data
+            } else {
+                map.isSuccess = false
+                map.message = "直播己经结束。"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录。"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
+    /**
+     * 停止直播
+     * @param showId
+     * @param token
+     * @return
+     */
+    def closeLive(Long showId, String token) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            def show = RuiShow.get(showId)
+            if (show && show.flag == 1 as Short && show.userBase == userBase) {
+                show.flag = Short.valueOf("0")
+                show.updateTime = new Date()
+                show.save flush: true
+
+                def num = showViewHistoryService.getViewNum(show)
+
+                def key = "live${show.id}"
+                def stream = QiNiuUtil.getStream(key)
+                QiNiuUtil.disableStream(stream, key)
+
+                def data = [:]
+                data.show = show
+                data.num = num
+
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = data
+            } else {
+                map.isSuccess = false
+                map.message = "直播己经结束。"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录。"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
 }

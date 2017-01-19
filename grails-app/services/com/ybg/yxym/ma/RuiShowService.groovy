@@ -107,11 +107,6 @@ class RuiShowService {
         show.title = title
         show.type = type
         show.save flush: true
-        if (show.hasErrors()) {
-            show.errors.each {
-                println it
-            }
-        }
 
         //计算活力值
         def postMeiLi = getUserMeili(userBase)
@@ -145,5 +140,43 @@ class RuiShowService {
             map.hasShare = 0
         }
         map
+    }
+
+    def createLive(UserBase userBase, RuiBar ruiBar, String thumbnail, String event) {
+        //生成实例
+        def show = new RuiShow()
+        show.userBase = userBase
+        show.ruiBar = ruiBar
+        show.thumbnail = thumbnail
+        show.title = "直播"
+        show.type = Short.valueOf("3")
+        show.save flush: true
+
+        //计算活力值
+        def postMeiLi = getUserMeili(userBase)
+        postMeiLi.hl = postMeiLi.hl + MeiliConstant.POST_PHOTO_VIEW
+        postMeiLi.save flush: true
+
+        MeiLiHistory.createInstance(userBase, MeiliConstant.MEILI_HL, MeiliConstant.POST_PHOTO_VIEW, "发布", show.id, 0L)
+
+        //关联话题
+        def systemEvent = getEvent(event)
+        if (systemEvent && systemEvent.flag == Short.valueOf("1")) {
+            def ruiEvent = new RuiEvent()
+            ruiEvent.event = systemEvent
+            ruiEvent.show = show
+            ruiEvent.save flush: true
+        }
+        show
+    }
+
+    private static getEvent(String event) {
+        def systemEvent = SystemEvent.findByAction(event)
+        if (systemEvent == null) {
+            systemEvent = new SystemEvent()
+            systemEvent.action = event
+            systemEvent.save flush: true
+        }
+        systemEvent
     }
 }

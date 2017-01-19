@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.2"
+version "0.3"
 group "ma"
 
 apply plugin:"eclipse"
@@ -55,6 +55,7 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     compile files('libs/taobao-sdk-20160607.jar')
+    compile 'com.qiniu.pili:pili-sdk-java:2.0.0'
 }
 
 assets {
