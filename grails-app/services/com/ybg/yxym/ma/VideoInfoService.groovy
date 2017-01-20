@@ -103,6 +103,7 @@ class VideoInfoService {
         videoInfo.save flush: true
     }
 
+    @Transactional
     def updateAt(String oldString, String newString) {
         VideoInfo.findAllByInfoKey("at").each { video ->
             video.urlInfo = video.urlInfo.replaceAll(oldString, newString)
