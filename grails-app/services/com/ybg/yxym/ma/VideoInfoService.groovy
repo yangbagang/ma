@@ -7,8 +7,8 @@ class VideoInfoService {
 
     def importAt() {
         //def maxId = 9124
-        def maxNum = 237
-        def urlBase = "http://www.avtb66.com/recent/"
+        def maxNum = 28
+        def urlBase = "http://www.avtb66.com/luanlun/"
         def uriList = []
         for (def i = 1; i <= maxNum; i++) {
             println("获取第${i}页")
@@ -33,7 +33,12 @@ class VideoInfoService {
 
     def getAtHtmlUri(String urlBase, Integer i) {
         try {
-            def url = i == 1 ? urlBase : urlBase + i
+            def url = ""
+            if (i == 1) {
+                url = urlBase
+            } else {
+                url = urlBase + "recent/" + i + "/"
+            }
             def html = url.toURL().text
             //解析
             def lines = html.split("\n")
@@ -90,7 +95,7 @@ class VideoInfoService {
         println("title=${titleInfo}")
         println("video=${videoUrl}")
         //构建结果集
-        videoInfo.infoKey = "at"
+        videoInfo.infoKey = "luanlun"
         videoInfo.urlInfo = videoUrl
         videoInfo.titleInfo = Base64Util.getEncodeString(titleInfo)
         videoInfo.imgInfo = imgInfo

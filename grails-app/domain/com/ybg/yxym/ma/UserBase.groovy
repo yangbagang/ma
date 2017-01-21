@@ -14,6 +14,7 @@ class UserBase {
         ymMemo nullable: true
         platform nullable: true
         platformId nullable: true
+        appToken nullable: true
     }
 
     Long ymCode = 0//悦美号，唯一，非空，自动生成，不可修改。
@@ -28,5 +29,6 @@ class UserBase {
     String platform = ""//平台
     String platformId = ""//平台ID
     Date createTime = new Date()
+    String appToken = ""
     transient Integer ml
 }

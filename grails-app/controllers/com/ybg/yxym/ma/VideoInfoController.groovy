@@ -61,12 +61,12 @@ class VideoInfoController {
         render map as JSON
     }
 
-    def listAt(Integer pageNum, Integer pageSize) {
+    def listAt(String keyInfo, Integer pageNum, Integer pageSize) {
         def map = [:]
         if (pageNum && pageSize) {
             def c = VideoInfo.createCriteria()
             def result = c.list(max: pageSize, offset: (pageNum - 1) * pageSize) {
-                eq("infoKey", "at")
+                eq("infoKey", keyInfo)
                 order("id", "desc")
             }
             map.isSuccess = true

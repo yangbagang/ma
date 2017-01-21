@@ -258,6 +258,8 @@ class RuiShowController {
             def ruiBar = RuiBar.get(barId)
             if (ruiBar) {
                 def show = ruiShowService.createLive(userBase, ruiBar, thumbnail, event)
+                showViewHistoryService.create(show, userBase)
+
                 def stream = QiNiuUtil.createStream("live${show.id}")
                 def url = QiNiuUtil.getRtmpPublishUrl("live${show.id}")
                 def data = [:]
