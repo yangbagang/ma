@@ -181,30 +181,21 @@ class RuiShowController {
     /**
      * 发布一条美秀
      * @param token 用户token
-     * @param barId 美秀版块ID
      * @param thumbnail 缩略图
      * @param title 美秀描述
-     * @param type 类型//1图片2视频3直播
+     * @param type 类型//1图片2视频。直播请使用createLive
      * @return
      */
-    def create(String token, Long barId, String thumbnail, String title, Short type) {
+    def create(String token, String thumbnail, String title, Short type) {
         def map = [:]
         if (UserUtil.checkToken(token)) {
             def userBase = UserBase.get(UserUtil.getUserId(token))
-            def ruiBar = RuiBar.get(barId)
-            if (barId == 0L || ruiBar) {
-                def show = ruiShowService.create(userBase, ruiBar, thumbnail, title, type)
+            def show = ruiShowService.create(userBase, thumbnail, title, type)
 
-                map.isSuccess = true
-                map.message = ""
-                map.errorCode = "0"
-                map.data = show
-            } else {
-                map.isSuccess = false
-                map.message = "美吧不存在，请检查。"
-                map.errorCode = "2"
-                map.data = "false"
-            }
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = show
         } else {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录。"

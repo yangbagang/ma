@@ -98,11 +98,10 @@ class RuiShowService {
         meili
     }
 
-    def create(UserBase userBase, RuiBar ruiBar, String thumbnail, String title, Short type) {
+    def create(UserBase userBase, String thumbnail, String title, Short type) {
         //生成实例
         def show = new RuiShow()
         show.userBase = userBase
-        show.ruiBar = ruiBar
         show.thumbnail = thumbnail
         show.title = title
         show.type = type
