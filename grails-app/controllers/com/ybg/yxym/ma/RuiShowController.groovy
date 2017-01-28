@@ -362,4 +362,77 @@ class RuiShowController {
         render map as JSON
     }
 
+    /**
+     * 离开直播
+     * @param showId
+     * @param token
+     * @return
+     */
+    def leaveLive(Long showId, String token) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            def show = RuiShow.get(showId)
+            if (show) {
+                showViewHistoryService.drop(show, userBase)
+
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = ""
+            } else {
+                map.isSuccess = false
+                map.message = "直播不存在。"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录。"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
+    /**
+     * 直播中发送消息
+     * @param token 发送者token
+     * @param showId 直播秀id
+     * @param flag 1发送给主播，0发送给所有参考直播用户。
+     * @param content 消息内容
+     */
+    def sendLiveMsg(String token, Long showId, Integer flag, String content) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            if (userBase) {
+                def show = RuiShow.get(showId)
+                if (show) {
+                    ruiShowService.sendLiveMsg(show, userBase, flag, content)
+                    map.isSuccess = true
+                    map.message = ""
+                    map.errorCode = "0"
+                    map.data = "true"
+                } else {
+                    map.isSuccess = false
+                    map.message = "直播不存在"
+                    map.errorCode = "3"
+                    map.data = "false"
+                }
+            } else {
+                map.isSuccess = false
+                map.message = "用户不存在"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
 }

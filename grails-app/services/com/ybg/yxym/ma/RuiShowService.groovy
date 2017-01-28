@@ -1,7 +1,9 @@
 package com.ybg.yxym.ma
 
 import com.ybg.yxym.utils.MeiliConstant
+import com.ybg.yxym.utils.MsgPushHelper
 import com.ybg.yxym.utils.UserUtil
+import grails.converters.JSON
 import grails.transaction.Transactional
 
 @Transactional
@@ -169,6 +171,31 @@ class RuiShowService {
         show
     }
 
+    def sendLiveMsg(RuiShow ruiShow, UserBase userBase, Integer flag, String content) {
+        if (flag == 1) {
+            sendMsg(userBase, ruiShow.userBase, content, 2)
+        } else {
+            def userList = ShowViewHistory.findAllByShow(ruiShow)*.userBase
+            userList.each { user ->
+                sendMsg(userBase, user, content, 2)
+            }
+        }
+    }
+
+    private static sendMsg(UserBase sendUser, UserBase receiverUser, String msg, Integer type) {
+        Thread.start {
+            def liveMsg = [:]
+            liveMsg.userBase = sendUser
+            liveMsg.msg = msg
+            liveMsg.type = type
+            def map = [:]
+            map.type = MsgPushHelper.LIVE_MSG
+            map.data = liveMsg
+            def content = map as JSON
+            MsgPushHelper.sendMsg(receiverUser.appToken, content.toString())
+        }
+    }
+
     private static getEvent(String event) {
         def systemEvent = SystemEvent.findByAction(event)
         if (systemEvent == null) {
@@ -178,4 +205,5 @@ class RuiShowService {
         }
         systemEvent
     }
+
 }

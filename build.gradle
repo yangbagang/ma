@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.4.1"
+version "0.5"
 group "ma"
 
 apply plugin:"eclipse"
@@ -23,6 +23,7 @@ apply plugin:"asset-pipeline"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url "http://mvn.gt.igexin.com/nexus/content/repositories/releases/" }
 }
 
 dependencyManagement {
@@ -56,6 +57,8 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     compile files('libs/taobao-sdk-20160607.jar')
     compile 'com.qiniu.pili:pili-sdk-java:2.0.0'
+    compile "com.gexin.platform:gexin-rp-sdk-http:4.0.1.2"
+    compile "com.gexin.platform:gexin-rp-sdk-template:4.0.0.5"
 }
 
 assets {

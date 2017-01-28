@@ -238,4 +238,39 @@ class UserBaseController {
 
         render map as JSON
     }
+
+    /**
+     * 更新App Token
+     * @param userToken
+     * @param appToken
+     * @return
+     */
+    def updateAppToken(String userToken, String appToken) {
+        def map = [:]
+        if (UserUtil.checkToken(userToken)) {
+            def userBase = UserBase.get(UserUtil.getUserId(userToken))
+            if (userBase) {
+                userBase.appToken = appToken
+                userBase.save flush: true
+
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = "true"
+            } else {
+                map.isSuccess = false
+                map.message = "用户不存在"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
+
 }
