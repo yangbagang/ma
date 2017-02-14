@@ -1,6 +1,7 @@
 package com.ybg.yxym.utils
 
 import com.qiniu.pili.*
+import grails.converters.JSON
 
 /**
  * Created by yangbagang on 2017/1/16.
@@ -10,7 +11,7 @@ class QiNiuUtil {
     static accessKey = "Qk5HOCRkT3g6oSUkycE18-DpuNR1DkuZ3GfArQRb"
     static secretKey = "r7foT2E9U0CdBeKuVd4tqVu9OA3nlnnuf-MVHAND"
     static hubName = "yuemei2017"
-    static streamKeyPrefix ="com.ybg.yxym.qn.456497846."
+    static streamKeyPrefix ="YueShow_"
 
     static client = new Client(accessKey, secretKey)
     static hub = client.newHub(hubName)
@@ -24,6 +25,7 @@ class QiNiuUtil {
         try {
             return hub.create(streamKeyPrefix + key)
         } catch (PiliException e) {
+            println e.message
             e.printStackTrace()
             return null
         }
@@ -35,6 +37,7 @@ class QiNiuUtil {
         try {
             stream = hub.get(streamKeyPrefix + key)
         } catch (PiliException e) {
+            println e.message
             e.printStackTrace()
         }
         return stream
@@ -92,6 +95,21 @@ class QiNiuUtil {
     static getRtmpLiveUrl(String key) {
         //RTMP直播地址
         return client.RTMPPlayURL("pili-live-rtmp.5yxym.com", hubName, key)
+    }
+
+    static getPublishJSON(String key, Stream stream) {
+        def map = [:]
+        map.id = streamKeyPrefix + key
+        map.title = key
+        map.hub = hubName
+        map.publishKey = stream.key
+        map.publishSecurity = "static"
+        def host = [:]
+        def publish = [:]
+        publish.rtmp = ""
+        host.publish = publish
+        map.host = host
+        map as JSON
     }
 
     static void main(String[] args) {

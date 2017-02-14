@@ -31,4 +31,22 @@ class UserBase {
     Date createTime = new Date()
     String appToken = ""
     transient Integer ml
+
+    def copyInstance() {
+        def instance = new UserBase()
+        instance.id = this.id
+        instance.ymCode = this.ymCode
+        instance.ymUser = this.ymUser
+        instance.nickName = this.nickName
+        instance.avatar = this.avatar
+        instance.avatarBG = this.avatarBG
+        instance.mobile = this.mobile
+        instance.flag = this.flag
+        instance.ymMemo = this.ymMemo
+        instance.platform = this.platform
+        instance.platformId = this.platformId
+        instance.createTime = this.createTime
+        instance.appToken = this.appToken
+        instance
+    }
 }

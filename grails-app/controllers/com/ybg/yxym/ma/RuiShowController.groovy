@@ -256,6 +256,7 @@ class RuiShowController {
                 def data = [:]
                 data.show = show
                 data.url = url
+                println data.url
 
                 map.isSuccess = true
                 map.message = ""

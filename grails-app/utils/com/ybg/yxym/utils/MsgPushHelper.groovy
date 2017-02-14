@@ -13,10 +13,10 @@ import com.gexin.rp.sdk.template.TransmissionTemplate
  */
 class MsgPushHelper {
 
-    private static appId = "4JCYuVTzz37viY08wQyu81"
-    private static appkey = "dYYkFFqDmc9cAStDjaopc"
-    private static master = "VSu5GEYc2P7GnVfaWhhAq1"
-    private static secret = "FdN8HjlrvH8oyCfIfODfp8"
+    private static appId = "JC6lFCLrQu8LQypvoFjDk8"
+    private static appkey = "GbUEoxOnCI7cdeLa3jxjI"
+    private static master = "Ii0YE04BUy7IgJKddoTpG7"
+    private static secret = "xiyCyCdQ8s5eYyzyS78Dc9"
     private static host = "http://sdk.open.api.igexin.com/apiex.htm"
 
     /** 透传消息设置，1为强制启动应用，客户端接收到消息后就会立即启动应用；2为等待应用启动*/
