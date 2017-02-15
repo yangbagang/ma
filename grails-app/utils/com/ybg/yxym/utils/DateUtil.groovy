@@ -14,4 +14,7 @@ class DateUtil {
         sdf_short.parse("1990-01-01")
     }
 
+    static getTimeString(Date date) {
+        sdf_full.format(date)
+    }
 }

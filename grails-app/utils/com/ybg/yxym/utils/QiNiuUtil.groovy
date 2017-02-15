@@ -11,7 +11,7 @@ class QiNiuUtil {
     static accessKey = "Qk5HOCRkT3g6oSUkycE18-DpuNR1DkuZ3GfArQRb"
     static secretKey = "r7foT2E9U0CdBeKuVd4tqVu9OA3nlnnuf-MVHAND"
     static hubName = "yuemei2017"
-    static streamKeyPrefix ="YueShow_"
+    static streamKeyPrefix ="live"
 
     static client = new Client(accessKey, secretKey)
     static hub = client.newHub(hubName)
@@ -89,12 +89,12 @@ class QiNiuUtil {
 
     static getRtmpPublishUrl(String key) {
         // RTMP推流地址
-        return client.RTMPPublishURL("pili-publish.5yxym.com", hubName, key, 3600)
+        return client.RTMPPublishURL("pili-publish.5yxym.com", hubName, streamKeyPrefix + key, 3600)
     }
 
     static getRtmpLiveUrl(String key) {
         //RTMP直播地址
-        return client.RTMPPlayURL("pili-live-rtmp.5yxym.com", hubName, key)
+        return client.RTMPPlayURL("pili-live-rtmp.5yxym.com", hubName, streamKeyPrefix + key)
     }
 
     static getPublishJSON(String key, Stream stream) {

@@ -1,6 +1,7 @@
 package com.ybg.yxym.ma.objectMarshaller
 
 import com.ybg.yxym.ma.UserBase
+import com.ybg.yxym.utils.DateUtil
 import grails.converters.JSON
 import org.grails.web.converters.exceptions.ConverterException
 import org.grails.web.converters.marshaller.ObjectMarshaller
@@ -29,7 +30,7 @@ class UserBaseMarshaller implements ObjectMarshaller<JSON> {
                 .key('mobile').value(object.mobile)
                 .key("flag").value(object.flag)
                 .key('ymMemo').value(object.ymMemo)
-                .key('createTime').value(object.createTime)
+                .key('createTime').value(DateUtil.getTimeString(object.createTime))
         writer.endObject()
     }
 

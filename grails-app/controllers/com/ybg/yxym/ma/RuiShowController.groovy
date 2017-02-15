@@ -251,8 +251,8 @@ class RuiShowController {
                 def show = ruiShowService.createLive(userBase, ruiBar, thumbnail, event)
                 showViewHistoryService.create(show, userBase)
 
-                def stream = QiNiuUtil.createStream("live${show.id}")
-                def url = QiNiuUtil.getRtmpPublishUrl("live${show.id}")
+                QiNiuUtil.createStream("${show.id}")
+                def url = QiNiuUtil.getRtmpPublishUrl("${show.id}")
                 def data = [:]
                 data.show = show
                 data.url = url
@@ -295,7 +295,7 @@ class RuiShowController {
                 def userList = showViewHistoryService.listUser(show)
                 showViewHistoryService.create(show, userBase)
 
-                def url = QiNiuUtil.getRtmpLiveUrl("live${show.id}")
+                def url = QiNiuUtil.getRtmpLiveUrl("${show.id}")
                 def data = [:]
                 data.show = show
                 data.url = url
@@ -338,7 +338,7 @@ class RuiShowController {
 
                 def num = showViewHistoryService.getViewNum(show)
 
-                def key = "live${show.id}"
+                def key = "${show.id}"
                 def stream = QiNiuUtil.getStream(key)
                 QiNiuUtil.disableStream(stream, key)
 
