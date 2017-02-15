@@ -292,12 +292,14 @@ class RuiShowController {
                 show.viewNum = show.viewNum + 1
                 show.save flush: true
 
+                def userList = showViewHistoryService.listUser(show)
                 showViewHistoryService.create(show, userBase)
 
                 def url = QiNiuUtil.getRtmpLiveUrl("live${show.id}")
                 def data = [:]
                 data.show = show
                 data.url = url
+                data.userList = userList
 
                 map.isSuccess = true
                 map.message = ""
