@@ -43,6 +43,60 @@ class RuiShowController {
     }
 
     /**
+     * 列出某个用户发的美秀。带分页。
+     * @param userId
+     * @param pageNum 显示第几页
+     * @param pageSize 每页显示多少条
+     * @return
+     */
+    def listByUserId(Long userId, Integer pageNum, Integer pageSize) {
+        def map = [:]
+        if (pageNum && pageSize && userId) {
+            def c = RuiShow.createCriteria()
+            def result = c.list(max: pageSize, offset: (pageNum - 1) * pageSize) {
+                userBase {
+                    eq("id", userId)
+                }
+                eq("flag", 1 as Short)
+                order("createTime", "desc")
+            }
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = result
+        } else {
+            map.isSuccess = false
+            map.message = "参数不能为空"
+            map.errorCode = "1"
+            map.data = ""
+        }
+        render map as JSON
+    }
+
+    /**
+     * 列出某个用户发的美秀数量。
+     * @param userId
+     * @return
+     */
+    def getShowNumByUserId(Long userId) {
+        def map = [:]
+        if (userId) {
+            def user = UserBase.get(userId)
+            def count = RuiShow.countByUserBase(user)
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = count
+        } else {
+            map.isSuccess = false
+            map.message = "参数不能为空"
+            map.errorCode = "1"
+            map.data = ""
+        }
+        render map as JSON
+    }
+
+    /**
      * 评价秀
      * @param token 用户token
      * @param showId 美秀ID
