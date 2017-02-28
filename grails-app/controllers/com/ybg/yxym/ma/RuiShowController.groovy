@@ -390,20 +390,14 @@ class RuiShowController {
                 show.updateTime = new Date()
                 show.save flush: true
 
-                def num = showViewHistoryService.getViewNum(show)
-
                 def key = "${show.id}"
                 def stream = QiNiuUtil.getStream(key)
                 QiNiuUtil.disableStream(stream, key)
 
-                def data = [:]
-                data.show = show
-                data.num = num
-
                 map.isSuccess = true
                 map.message = ""
                 map.errorCode = "0"
-                map.data = data
+                map.data = "true"
             } else {
                 map.isSuccess = false
                 map.message = "直播己经结束。"
@@ -490,6 +484,51 @@ class RuiShowController {
             map.data = "false"
         }
 
+        render map as JSON
+    }
+
+    /**
+     * 检查某条美秀状态。1正常，0己关闭。对于直播，1表示进行中，0表示己结束。
+     * @param showId
+     * @return
+     */
+    def checkStatus(Long showId) {
+        def map = [:]
+        def show = RuiShow.get(showId)
+        if (show) {
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = "${show.flag}"
+        } else {
+            map.isSuccess = false
+            map.message = "美秀不存在，请检查。"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+        render map as JSON
+    }
+
+    def liveDetail(Long showId) {
+        def map = [:]
+        def show = RuiShow.get(showId)
+        if (show) {
+            def num = showViewHistoryService.getViewNum(show)
+
+            def data = [:]
+            data.show = show
+            data.num = num
+
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = data
+        } else {
+            map.isSuccess = false
+            map.message = "美秀不存在，请检查。"
+            map.errorCode = "1"
+            map.data = "false"
+        }
         render map as JSON
     }
 }

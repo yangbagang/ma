@@ -149,7 +149,7 @@ class RuiShowService {
         show.userBase = userBase
         show.ruiBar = ruiBar
         show.thumbnail = thumbnail
-        show.title = "直播"
+        show.title = event
         show.type = Short.valueOf("3")
         show.save flush: true
 
