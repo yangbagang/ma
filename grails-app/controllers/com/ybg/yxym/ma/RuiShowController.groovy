@@ -238,13 +238,14 @@ class RuiShowController {
      * @param thumbnail 缩略图
      * @param title 美秀描述
      * @param type 类型//1图片2视频。直播请使用createLive
+     * @param price 价格
      * @return
      */
-    def create(String token, String thumbnail, String title, Short type) {
+    def create(String token, String thumbnail, String title, Short type, Integer price) {
         def map = [:]
         if (UserUtil.checkToken(token)) {
             def userBase = UserBase.get(UserUtil.getUserId(token))
-            def show = ruiShowService.create(userBase, thumbnail, title, type)
+            def show = ruiShowService.create(userBase, thumbnail, title, type, price)
 
             map.isSuccess = true
             map.message = ""

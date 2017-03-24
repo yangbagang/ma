@@ -100,13 +100,14 @@ class RuiShowService {
         meili
     }
 
-    def create(UserBase userBase, String thumbnail, String title, Short type) {
+    def create(UserBase userBase, String thumbnail, String title, Short type, Integer price) {
         //生成实例
         def show = new RuiShow()
         show.userBase = userBase
         show.thumbnail = thumbnail
         show.title = title
         show.type = type
+        show.price = price
         show.save flush: true
 
         //计算活力值
