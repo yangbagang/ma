@@ -13,8 +13,8 @@ import io.rong.methods.*;
 
 public class RongCloud {
 
-	private static String appKey = "";
-	private static String appSecret = "";
+	private static String appKey = "k51hidwqkenpb";
+	private static String appSecret = "bwRbFNd4Tmdr";
 
 	private static ConcurrentHashMap<String, RongCloud> rongCloud = new ConcurrentHashMap<String,RongCloud>();
 	
