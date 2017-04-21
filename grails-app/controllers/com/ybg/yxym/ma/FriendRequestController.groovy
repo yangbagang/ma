@@ -67,4 +67,47 @@ class FriendRequestController {
         render map as JSON
     }
 
+    def createRequest(String token, Long userId, String reason) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            def userBase2 = UserBase.get(userId)
+            def friendRequest = FriendRequest.findByFromUserAndTargetUser(userBase, userBase2)
+            if (userBase && userBase2) {
+                if (friendRequest) {
+                    map.isSuccess = false
+                    map.message = "己经添加过了"
+                    map.errorCode = "3"
+                    map.data = "false"
+                } else {
+                    friendRequest = new FriendRequest()
+                    friendRequest.fromUser = userBase
+                    friendRequest.targetUser = userBase2
+                    friendRequest.createTime = new Date()
+                    friendRequest.reason = reason
+                    friendRequest.save flush: true
+
+                    //TODO 发送一条通知消息
+
+                    map.isSuccess = true
+                    map.message = ""
+                    map.errorCode = "0"
+                    map.data = ""
+                }
+            } else {
+                map.isSuccess = false
+                map.message = "参数错误"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
+
 }

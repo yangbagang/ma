@@ -1,5 +1,6 @@
 package com.ybg.yxym.ma
 
+import com.ybg.yxym.ma.jchat.JChatUser
 import com.ybg.yxym.utils.UserUtil
 import grails.transaction.Transactional
 
@@ -10,13 +11,27 @@ class UserBaseService {
 
     def getUMToken(String openid, String platform) {
         def userBase = UserBase.findByPlatformIdAndPlatform(openid, platform)
+        def isNew = false
         if (!userBase) {
+            //分配悦美号
+            def ymCode = YueMeiCode.findByFlagAndHidden(1 as Short, 0 as Short)
+            if (ymCode) {
+                ymCode.flag = 0 as Short
+                ymCode.save flush: true
+            }
             userBase = new UserBase()
             userBase.platform = platform
             userBase.platformId = openid
+            userBase.ymCode = Long.valueOf(ymCode.code)
             userBase.save flush: true
+            isNew = true
         }
-        UserUtil.createToken(userBase.id)
+        def token = UserUtil.createToken(userBase.id)
+        if (isNew) {
+            //更新极光数据
+            JChatUser.register("${userBase.ymCode}", token)
+        }
+        token
     }
 
     def completeUserBase(String token, String birthday, String nickName, Integer sex, String avatar) {
@@ -35,6 +50,8 @@ class UserBaseService {
         }
         if (userBaseChanged) {
             userBase.save flush: true
+            //更新极光数据
+            JChatUser.updateInfo("${userBase.ymCode}", nickName, avatar)
         }
 
         def userInfoChanged = false
@@ -46,6 +63,7 @@ class UserBaseService {
             }
         } catch (Exception e) {
             //
+            e.printStackTrace()
         }
         if (sex == 1 || sex == 0) {
             userInfo.sex = sex

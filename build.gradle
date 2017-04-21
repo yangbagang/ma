@@ -59,6 +59,7 @@ dependencies {
     compile 'com.qiniu.pili:pili-sdk-java:2.0.0'
     compile "com.gexin.platform:gexin-rp-sdk-http:4.0.1.2"
     compile "com.gexin.platform:gexin-rp-sdk-template:4.0.0.5"
+    compile "cn.jpush.api:jiguang-common:0.1.6"
 }
 
 assets {

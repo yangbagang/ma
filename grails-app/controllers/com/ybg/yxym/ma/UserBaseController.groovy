@@ -1,5 +1,6 @@
 package com.ybg.yxym.ma
 
+import com.ybg.yxym.ma.jchat.JChatUser
 import com.ybg.yxym.utils.UserUtil
 import grails.converters.JSON
 import org.apache.commons.codec.digest.DigestUtils
@@ -33,6 +34,9 @@ class UserBaseController {
                     map.message = "登录完成"
                     map.errorCode = "0"
                     map.data = token
+
+                    //更新极光数据
+                    JChatUser.updatePassword("${user.ymCode}", token)
                 } else {
                     map.isSuccess = false
                     map.message = "用户名或密码错误"
@@ -84,6 +88,9 @@ class UserBaseController {
                 map.message = "注册完成"
                 map.errorCode = "0"
                 map.data = token
+
+                //更新极光数据
+                JChatUser.register("${user.ymCode}", token)
             }
         } else {
             map.isSuccess = false
@@ -113,6 +120,32 @@ class UserBaseController {
         } else {
             map.isSuccess = false
             map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
+
+    /**
+     * 获得用户基本信息
+     * @param ymCode
+     */
+    def getUserBaseByYmCode(Long ymCode) {
+        def map = [:]
+        def userBase = UserBase.findByYmCode(ymCode)
+        if (userBase) {
+            def result = [:]
+            result.userBase = userBase
+            result.userInfo = UserInfo.findByUserBase(userBase)
+
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = result
+        } else {
+            map.isSuccess = false
+            map.message = "用户不存在"
             map.errorCode = "1"
             map.data = "false"
         }
