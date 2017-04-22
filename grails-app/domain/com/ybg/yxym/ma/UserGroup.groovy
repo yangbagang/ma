@@ -8,6 +8,7 @@ class UserGroup {
     }
 
     String name
-    Date createTime
+    Date createTime = new Date()
     Integer level = 1
+    Long groupId = 0L
 }

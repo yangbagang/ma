@@ -1,5 +1,6 @@
 package com.ybg.yxym.ma
 
+import com.ybg.yxym.ma.jchat.JChatUser
 import com.ybg.yxym.utils.UserUtil
 import grails.converters.JSON
 
@@ -126,7 +127,9 @@ class FriendController {
                 friend.disturbing = disturbing
                 friend.save flush: true
 
-                //TODO 同步IM
+                //同步IM
+                JChatUser.updateDisturbing("${userBase.ymCode}", "${friend.friend.ymCode}",
+                        disturbing == 0 as Short)
 
                 map.isSuccess = true
                 map.message = ""
@@ -164,7 +167,9 @@ class FriendController {
                 friend.inBlacklist = inBlacklist
                 friend.save flush: true
 
-                //TODO 同步IM
+                //同步IM
+                JChatUser.updateBlackList("${userBase.ymCode}", "${friend.friend.ymCode}",
+                        inBlacklist == 1 as Short)
 
                 map.isSuccess = true
                 map.message = ""

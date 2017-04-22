@@ -2,6 +2,7 @@ package com.ybg.yxym.ma.jchat
 
 import cn.jiguang.common.resp.APIConnectionException
 import cn.jiguang.common.resp.APIRequestException
+import cn.jmessage.api.common.model.NoDisturbPayload
 import cn.jmessage.api.common.model.RegisterInfo
 import cn.jmessage.api.common.model.UserPayload
 import org.slf4j.LoggerFactory
@@ -90,4 +91,37 @@ class JChatUser extends JChatBase {
         }
     }
 
+    static updateBlackList(String ymCode1, String ymCode2, Boolean flag) {
+        try {
+            if (flag) {
+                client.addBlackList(ymCode1, ymCode2)
+            } else {
+                client.removeBlacklist(ymCode1, ymCode2)
+            }
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e)
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e)
+            LOG.info("HTTP Status: " + e.getStatus())
+            LOG.info("Error Message: " + e.getMessage())
+        }
+    }
+
+    static updateDisturbing(String ymCode1, String ymCode2, Boolean flag) {
+        try {
+            def payload = new NoDisturbPayload.Builder()
+            if (flag) {
+                payload.setAddSingleUsers(ymCode2)
+            } else {
+                payload.setRemoveSingleUsers(ymCode2)
+            }
+            client.setNoDisturb(ymCode1, payload.build());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
 }

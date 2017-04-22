@@ -8,6 +8,7 @@ class GroupMember {
     }
 
     UserBase member
-    Date joinTime
+    String nickName = member.nickName
+    Date joinTime = new Date()
     Integer role = 0
 }
