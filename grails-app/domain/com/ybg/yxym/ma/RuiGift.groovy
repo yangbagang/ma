@@ -8,8 +8,7 @@ class RuiGift {
 
     Float basePrice = 0//价格，多少美票
     Float realPrice = 0//实际出售价格
-    Float buyPrice = 0//回收价格
-    String name
+    String name = ""
     String image = ""//图片
     Integer rq = 0//人气值
     Integer hl = 0//活动值
