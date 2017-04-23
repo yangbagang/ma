@@ -60,6 +60,7 @@ dependencies {
     compile "com.gexin.platform:gexin-rp-sdk-http:4.0.1.2"
     compile "com.gexin.platform:gexin-rp-sdk-template:4.0.0.5"
     compile "cn.jpush.api:jiguang-common:0.1.6"
+    compile 'Pingplusplus:pingpp-java:2.1.7'
 }
 
 assets {

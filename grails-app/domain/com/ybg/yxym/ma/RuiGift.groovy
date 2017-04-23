@@ -6,9 +6,10 @@ class RuiGift {
         name unique: true
     }
 
-    Float basePrice = 0//价格，多少美票
-    Float realPrice = 0//实际出售价格
+    Integer basePrice = 0//价格，多少美票
+    Integer realPrice = 0//实际出售价格
     String name = ""
+    String unitName = ""
     String image = ""//图片
     Integer rq = 0//人气值
     Integer hl = 0//活动值

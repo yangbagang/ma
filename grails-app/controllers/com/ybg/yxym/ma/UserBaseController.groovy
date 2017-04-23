@@ -81,6 +81,10 @@ class UserBaseController {
                 def userInfo = new UserInfo()
                 userInfo.userBase = user
                 userInfo.save flush: true
+                //生成财富扩展
+                def userFortune = new UserFortune()
+                userFortune.userBase = user
+                userFortune.save flush: true
 
                 //构造返回数据
                 def token = UserUtil.createToken(user.id)

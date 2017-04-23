@@ -8,6 +8,6 @@ class UserGift {
 
     UserBase fromUser
     UserBase targetUser
-    Date createTime
+    Date createTime = new Date()
     RuiGift gift
 }
