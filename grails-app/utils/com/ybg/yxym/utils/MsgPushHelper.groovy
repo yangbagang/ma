@@ -27,6 +27,7 @@ class MsgPushHelper {
     static USER_ENTER_LIVE = "user_enter_live"
     static USER_LEAVE_LIVE = "user_leave_live"
     static LIVE_MSG = "live_msg"
+    static PAY_CALL_BACK = "pay_call_back"
 
     /**
      * 个推消息发送
@@ -35,15 +36,15 @@ class MsgPushHelper {
      * @param content
      * @return
      */
-    public static boolean sendMsg(String clientId, String content) {
-        IGtPush push = new IGtPush(host, appkey, master);
-        SingleMessage message = new SingleMessage();
-        message.setData(transmissionTemplateFromContent(content));
-        message.setOfflineExpireTime(1000 * 20);
-        Target target = new Target();
-        target.setAppId(appId);
-        target.setClientId(clientId);
-        IPushResult ret = null;
+    static boolean sendMsg(String clientId, String content) {
+        IGtPush push = new IGtPush(host, appkey, master)
+        SingleMessage message = new SingleMessage()
+        message.setData(transmissionTemplateFromContent(content))
+        message.setOfflineExpireTime(1000 * 20)
+        Target target = new Target()
+        target.setAppId(appId)
+        target.setClientId(clientId)
+        IPushResult ret = null
         try {
             ret = push.pushMessageToSingle(message, target);
         } catch (RequestException e) {
@@ -55,33 +56,33 @@ class MsgPushHelper {
             println("ret  个推返回信息：" + ret.getResponse().toString());
             if (ret.getResponse().toString().contains("successed_online")
                     || ret.getResponse().toString().contains("successed_offline")) {
-                return true;
+                return true
             } else {
                 //logger.info("个推错误原因：" + ret.getResponse().toString() + ",MsgPushParams  " + params);
             }
         } else {
             //logger.info("服务器响应异常 ,MsgPushParams  " + params);
         }
-        return false;
+        return false
     }
 
-    public static TransmissionTemplate transmissionTemplateFromContent(String content) {
+    static TransmissionTemplate transmissionTemplateFromContent(String content) {
         TransmissionTemplate template = new TransmissionTemplate()
         template.setAppId(appId)
         template.setAppkey(appkey)
         //logger("content" + content, INFO)
         template.setTransmissionType(transmissionType)
-        template.setTransmissionContent(content);
-        APNPayload payload = new APNPayload();
-        payload.setBadge(1);
-        payload.setContentAvailable(1);
-        payload.setSound("default");
-        payload.setCategory("由客户端定义");
-        payload.setAlertMsg(new APNPayload.SimpleAlertMsg("hello"));
+        template.setTransmissionContent(content)
+        APNPayload payload = new APNPayload()
+        payload.setBadge(1)
+        payload.setContentAvailable(1)
+        payload.setSound("default")
+        payload.setCategory("由客户端定义")
+        payload.setAlertMsg(new APNPayload.SimpleAlertMsg("hello"))
         // 字典模式使用下者
-        // payload.setAlertMsg(getDictionaryAlertMsg());
-        template.setAPNInfo(payload);
-        return template;
+        // payload.setAlertMsg(getDictionaryAlertMsg())
+        template.setAPNInfo(payload)
+        return template
     }
 
 }

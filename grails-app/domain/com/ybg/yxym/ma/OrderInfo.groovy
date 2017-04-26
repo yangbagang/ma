@@ -25,6 +25,7 @@ class OrderInfo {
     Short payWay   //0:银联 1:支付宝 2:微信支付 3:在线账户
 
     String transNo = ""
+    RuiCard ruiCard
     Float orderMoney = 0f
     Date createTime = new Date()
     Date confirmTime//支付时间

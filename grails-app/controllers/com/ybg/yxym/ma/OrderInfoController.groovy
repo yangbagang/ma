@@ -30,7 +30,7 @@ class OrderInfoController {
                     map.isSuccess = true
                     map.message = ""
                     map.errorCode = "0"
-                    map.data = orderInfo
+                    map.data = orderInfo.orderNo
                 } else {
                     map.isSuccess = false
                     map.message = "参数错误"
@@ -59,16 +59,13 @@ class OrderInfoController {
      */
     def queryOrderIsPay(String orderNo) {
         def map = [:]
-        map.success = true
-        map.isPay = true
-        map.payWay = 2
-        map.msg = ""
         def orderInfo = OrderInfo.findByOrderNo(orderNo)
         if (orderInfo) {
             if (orderInfo.payStatus == (1 as Short)) {//己经支付
-                map.success = true
-                map.isPay = true
-                map.payWay = orderInfo.payWay
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = "0"
+                map.data = "${orderInfo.payWay}"
             } else {
                 //未支付,有可能是ping++没有回调webhook
                 //此处进行主动查询,如果己经支付则更新状态并返回
@@ -87,21 +84,35 @@ class OrderInfoController {
                             //更新订单状态
                             orderInfoService.updateOrderStatus(orderInfo, transaction, charge.getTransactionNo())
 
-                            map.put("isPay", true);
+                            map.isSuccess = true
+                            map.message = ""
+                            map.errorCode = "0"
+                            map.data = "${orderInfo.payWay}"
                         } else {
-                            map.put("isPay", false);
+                            map.isSuccess = false
+                            map.message = ""
+                            map.errorCode = "2"
+                            map.data = "false"
                         }
                     } catch (Exception e) {
-                        map.put("isPay", false);
+                        map.isSuccess = false
+                        map.message = ""
+                        map.errorCode = "2"
+                        map.data = "false"
                         println "********queryOrderInfo********查询charge报错:" + e.getMessage()
                     }
                 } else {
-                    map.isPay = false
+                    map.isSuccess = false
+                    map.message = ""
+                    map.errorCode = "2"
+                    map.data = "false"
                 }
             }
         } else {
-            map.success = false
-            map.msg = "订单号有误"
+            map.isSuccess = false
+            map.message = "参数不能为空"
+            map.errorCode = "1"
+            map.data = "false"
         }
         render map as JSON
     }
@@ -113,9 +124,9 @@ class OrderInfoController {
      * @param payType
      */
     @Transactional
-    def createPingPlusCharge(Long machineId, String orderNo, String payType) {
+    def createPingPlusCharge(String orderNo, String payType) {
         def map = [:]
-        if (machineId && orderNo && payType) {
+        if (orderNo && payType) {
             try {
                 def orderInfo = OrderInfo.findByOrderNo(orderNo)
                 orderInfo.payWay = Short.valueOf(payType)
@@ -135,17 +146,24 @@ class OrderInfoController {
                     transactionInfo.isSuccess = 0 as Short//是否支付成功 0：未支付；1：支付成功
                     transactionInfo.createTime = new Date()
                     transactionInfo.save flush: true
-                    map.put("Charge", charge)
-                    map.put("success", true)
+
+                    map.isSuccess = true
+                    map.message = ""
+                    map.errorCode = "0"
+                    map.data = charge
                 }
             } catch (Exception e) {
                 e.printStackTrace()
-                map.put("success", false)
-                map.put("msg", e.getMessage())
+                map.isSuccess = false
+                map.message = e.getMessage()
+                map.errorCode = "2"
+                map.data = "false"
             }
         } else {
-            map.put("success", false)
-            map.put("msg", "参数不能为空")
+            map.isSuccess = false
+            map.message = "参数不能为空"
+            map.errorCode = "1"
+            map.data = "false"
         }
         render map as JSON
     }

@@ -12,6 +12,7 @@ class OrderInfoService {
         def orderInfo = new OrderInfo()
         orderInfo.userBase = userBase
         orderInfo.orderNo = orderNo
+        orderInfo.ruiCard = ruiCard
         orderInfo.orderMoney = ruiCard.realPrice
         orderInfo.save flush: true
 
@@ -19,6 +20,7 @@ class OrderInfoService {
     }
 
     def updateOrderStatus(OrderInfo orderInfo, TransactionInfo transactionInfo, String transaction_no) {
+        //update order
         orderInfo.transNo = transaction_no
         orderInfo.payStatus = 1 as Short
         orderInfo.confirmTime = new Date()
@@ -27,5 +29,11 @@ class OrderInfoService {
         transactionInfo.updateTime = new Date()
         transactionInfo.save flush: true
         orderInfo.save flush: true
+        //update meipiao
+        def userBase = orderInfo.userBase
+        def userFortune = UserFortune.findByUserBase(userBase)
+        userFortune.meiPiao += orderInfo.ruiCard.ruiMoney
+        userFortune.save flush: true
     }
+
 }
