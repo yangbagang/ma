@@ -5,6 +5,8 @@ import grails.converters.JSON
 
 class FollowController {
 
+    def followService
+
     /**
      * 关注
      * @param token 用户token
@@ -22,11 +24,7 @@ class FollowController {
                     map.errorCode = "3"
                     map.data = "false"
                 } else {
-                    def instance = new Follow()
-                    instance.userBase = user
-                    instance.follow = follow
-                    instance.createTime = new Date()
-                    instance.save flush: true
+                    followService.follow(user, follow)
 
                     map.isSuccess = true
                     map.message = ""
@@ -94,6 +92,47 @@ class FollowController {
             map.errorCode = "1"
             map.data = "false"
         }
+        render map as JSON
+    }
+
+    def checkFollowStatus(String token, Long userId) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def user = UserBase.get(userId)
+            if (user && user.flag == 1 as Short) {
+                def data = [:]
+                def myself = UserBase.get(UserUtil.getUserId(token))
+                def follow = Follow.findByUserBaseAndFollow(user, myself)
+                if (follow) {
+                    data.isFollowed = 1
+                } else {
+                    data.isFollowed = 0
+                }
+                def friend = Friend.findByUserBaseAndFriend(user, myself)
+                if (friend) {
+                    data.isFriend = 1
+                } else {
+                    data.isFriend = 0
+                }
+
+                data.isFollow =
+                map.isSuccess = true
+                map.message = ""
+                map.errorCode = ""
+                map.data = data
+            } else {
+                map.isSuccess = false
+                map.message = "用户不存在"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
         render map as JSON
     }
 }

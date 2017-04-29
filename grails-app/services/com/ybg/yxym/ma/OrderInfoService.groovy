@@ -29,11 +29,19 @@ class OrderInfoService {
         transactionInfo.updateTime = new Date()
         transactionInfo.save flush: true
         orderInfo.save flush: true
+
         //update meipiao
         def userBase = orderInfo.userBase
         def userFortune = UserFortune.findByUserBase(userBase)
         userFortune.meiPiao += orderInfo.ruiCard.ruiMoney
         userFortune.save flush: true
+
+        def userFortuneHistory = new UserFortuneHistory()
+        userFortuneHistory.userBase = userBase
+        userFortuneHistory.meiPiao = orderInfo.ruiCard.ruiMoney
+        userFortuneHistory.reasonType = 0
+        userFortuneHistory.reason = "chongzhi"
+        userFortuneHistory.save flush: true
     }
 
 }

@@ -206,15 +206,24 @@ class RuiShowController {
 
     /**
      * 显示美秀详细资料，包含相关附件，如附加的图片等。但不包括用户信息。
+     * @param token
      * @param showId 美秀ID
      * @return
      */
-    def detail(Long showId) {
+    def detail(String token, Long showId) {
         def map = [:]
         def show = RuiShow.get(showId)
         if (show && show.flag == 1 as Short) {
             show.viewNum = show.viewNum + 1
             show.save flush: true
+
+            if (token != "") {
+                def userId = UserUtil.getUserId(token)
+                def userBase = UserBase.get(userId)
+                if (userBase != null) {
+                    showViewHistoryService.create(show, userBase)
+                }
+            }
 
             def files = ShowFile.findAllByShowAndFlag(show, 1 as Short)
             show.files = files
@@ -532,4 +541,96 @@ class RuiShowController {
         }
         render map as JSON
     }
+
+    def checkPayStatus(String token, Long showId) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            if (userBase) {
+                def show = RuiShow.get(showId)
+                if (show) {
+                    if (show.price > 0 && !showViewHistoryService.hasView(userBase, show)) {
+                        map.isSuccess = true
+                        map.message = "需要付费才能看"
+                        map.errorCode = "4"
+                        map.data = "false"
+                    } else {
+                        map.isSuccess = true
+                        map.message = "不需要付费或己经付过了"
+                        map.errorCode = ""
+                        map.data = "true"
+                    }
+                } else {
+                    map.isSuccess = false
+                    map.message = "美秀不存在"
+                    map.errorCode = "3"
+                    map.data = "false"
+                }
+            } else {
+                map.isSuccess = false
+                map.message = "用户不存在"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
+
+    def payForShow(String token, Long showId) {
+        def map = [:]
+        if (UserUtil.checkToken(token)) {
+            def userBase = UserBase.get(UserUtil.getUserId(token))
+            if (userBase) {
+                def show = RuiShow.get(showId)
+                if (show) {
+                    if (show.price <= 0 || showViewHistoryService.hasView(userBase, show)) {
+                        map.isSuccess = true
+                        map.message = ""
+                        map.errorCode = "0"
+                        map.data = "true"
+                    } else {
+                        def userFortune = UserFortune.findByUserBase(userBase)
+                        if (userFortune.meiPiao >= show.price) {
+                            ruiShowService.payShow(userFortune, show)
+                            showViewHistoryService.create(show, userBase)
+
+                            map.isSuccess = true
+                            map.message = ""
+                            map.errorCode = "0"
+                            map.data = "true"
+                        } else {
+                            map.isSuccess = true
+                            map.message = "余额不足"
+                            map.errorCode = "4"
+                            map.data = "false"
+                        }
+                    }
+                } else {
+                    map.isSuccess = false
+                    map.message = "美秀不存在"
+                    map.errorCode = "3"
+                    map.data = "false"
+                }
+            } else {
+                map.isSuccess = false
+                map.message = "用户不存在"
+                map.errorCode = "2"
+                map.data = "false"
+            }
+        } else {
+            map.isSuccess = false
+            map.message = "登录凭证失效，请重新登录"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
+
 }

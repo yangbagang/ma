@@ -45,6 +45,10 @@ class ShowViewHistoryService {
         ShowViewHistory.findAllByShow(ruiShow)*.userBase
     }
 
+    def hasView(UserBase userBase, RuiShow ruiShow) {
+        ShowViewHistory.countByUserBaseAndShow(userBase, ruiShow) > 0
+    }
+
     private static sendMsg(RuiShow ruiShow, UserBase userBase, Integer type) {
         Thread.start {
             ShowViewHistory.withNewSession {
