@@ -158,6 +158,28 @@ class UserBaseController {
     }
 
     /**
+     * 获得用户ID
+     * @param ymCode
+     */
+    def getUserIdByYmCode(Long ymCode) {
+        def map = [:]
+        def userBase = UserBase.findByYmCode(ymCode)
+        if (userBase) {
+            map.isSuccess = true
+            map.message = ""
+            map.errorCode = "0"
+            map.data = "${userBase.id}"
+        } else {
+            map.isSuccess = false
+            map.message = "用户不存在"
+            map.errorCode = "1"
+            map.data = "false"
+        }
+
+        render map as JSON
+    }
+
+    /**
      * 补充资料
      * @param token 用户token
      * @param birthday 生日
