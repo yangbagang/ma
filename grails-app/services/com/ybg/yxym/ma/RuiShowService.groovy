@@ -207,4 +207,16 @@ class RuiShowService {
         systemEvent
     }
 
+    def payShow(UserFortune userFortune, RuiShow ruiShow) {
+        userFortune.meiPiao -= ruiShow.price
+        userFortune.save flush: true
+
+        def userFortuneHistory = new UserFortuneHistory()
+        userFortuneHistory.userBase = userFortune.userBase
+        userFortuneHistory.meiPiao = -ruiShow.price
+        userFortuneHistory.reasonType = 0
+        userFortuneHistory.reason = "ruiShow"
+        userFortuneHistory.save flush: true
+    }
+
 }

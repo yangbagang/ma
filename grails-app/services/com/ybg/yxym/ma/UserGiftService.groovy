@@ -22,6 +22,13 @@ class UserGiftService {
         userGift.targetUser = receiver
         userGift.createTime = new Date()
         userGift.save flush: true
+
+        def userFortuneHistory = new UserFortuneHistory()
+        userFortuneHistory.userBase = sender
+        userFortuneHistory.meiPiao = -gift.realPrice
+        userFortuneHistory.reasonType = 0
+        userFortuneHistory.reason = "ruiShow"
+        userFortuneHistory.save flush: true
         //加美力值
         def userMeiLi = UserMeiLi.findByUserBase(sender)
         if (userMeiLi == null) {
