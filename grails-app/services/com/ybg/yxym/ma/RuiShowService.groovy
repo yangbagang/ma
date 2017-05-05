@@ -172,13 +172,13 @@ class RuiShowService {
         show
     }
 
-    def sendLiveMsg(RuiShow ruiShow, UserBase userBase, Integer flag, String content) {
+    def sendLiveMsg(RuiShow ruiShow, UserBase userBase, Integer flag, Integer type, String content) {
         if (flag == 1) {
-            sendMsg(userBase, ruiShow.userBase, content, 2)
+            sendMsg(userBase, ruiShow.userBase, content, type)
         } else {
             def userList = ShowViewHistory.findAllByShow(ruiShow)*.userBase
             userList.each { user ->
-                sendMsg(userBase, user, content, 2)
+                sendMsg(userBase, user, content, type)
             }
         }
     }

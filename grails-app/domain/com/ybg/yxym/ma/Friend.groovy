@@ -9,7 +9,7 @@ class Friend {
 
     UserBase friend
     Date createTime = new Date()
-    String nickName = friend.nickName
+    String nickName = friend?.nickName
     Short disturbing = 1 as Short
     Short inBlacklist = 0 as Short
 }

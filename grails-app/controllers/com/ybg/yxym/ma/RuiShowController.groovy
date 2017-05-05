@@ -452,16 +452,17 @@ class RuiShowController {
      * @param token 发送者token
      * @param showId 直播秀id
      * @param flag 1发送给主播，0发送给所有参考直播用户。
+     * @param type 1 gift, 2 msg
      * @param content 消息内容
      */
-    def sendLiveMsg(String token, Long showId, Integer flag, String content) {
+    def sendLiveMsg(String token, Long showId, Integer flag, Integer type, String content) {
         def map = [:]
         if (UserUtil.checkToken(token)) {
             def userBase = UserBase.get(UserUtil.getUserId(token))
             if (userBase) {
                 def show = RuiShow.get(showId)
                 if (show) {
-                    ruiShowService.sendLiveMsg(show, userBase, flag, content)
+                    ruiShowService.sendLiveMsg(show, userBase, flag, type, content)
                     map.isSuccess = true
                     map.message = ""
                     map.errorCode = "0"
