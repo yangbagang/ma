@@ -332,4 +332,10 @@ class UserBaseController {
         render map as JSON
     }
 
+    def getAvatarByYmCode(Long ymCode) {
+        def userBase = UserBase.findByYmCode(ymCode)
+        def avatar = userBase?.avatar ?: ""
+
+        render avatar
+    }
 }
