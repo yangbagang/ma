@@ -98,13 +98,13 @@ environments:
             username: root
             password: fuckyou1234
             dbCreate: update
-            url: jdbc:mysql://localhost:3306/yxym?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
+            url: jdbc:mysql://192.168.12.88:3306/yxym?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
     test:
         dataSource:
             username: root
             password: fuckyou1234
             dbCreate: none
-            url: jdbc:mysql://localhost:3306/yxym?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
+            url: jdbc:mysql://192.168.12.88:3306/yxym?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull
     production:
         dataSource:
             username: root
